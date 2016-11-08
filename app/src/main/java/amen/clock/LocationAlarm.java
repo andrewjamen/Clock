@@ -31,7 +31,7 @@ public class LocationAlarm extends AppCompatActivity {
 
 
         locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        location = locationMgr.getLastKnownLocation(/*provider*/);
+        //location = locationMgr.getLastKnownLocation(/*provider*/);
 
 
 

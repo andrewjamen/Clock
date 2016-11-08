@@ -144,13 +144,13 @@ public class SetAlarm extends AppCompatActivity {
 
                 //get location of phone
                 locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                location = locationMgr.getLastKnownLocation(/*provider*/);
+                //location = locationMgr.getLastKnownLocation(/*provider*/);
 
 
 
                 //send to setAlarm1 method. This could probably just go down in here, if it isn't too much code.
                 //Parameters of this method are prety straight forward (look at method header)
-                setAlarm1(alarmTime,alarmMessageText,rptDays,timeZoneSelection,location);
+                //setAlarm1(alarmTime,alarmMessageText,rptDays,timeZoneSelection,location);
             }
 
 
@@ -164,13 +164,13 @@ public class SetAlarm extends AppCompatActivity {
 
     // TODO: create alarm class?
 
-    void setAlarm1(long time, String message, boolean[] repeatDay, String timezone, Location loc)
-    {
-        PendingIntent alarmIntent;
-        AlarmManager alarmMgr  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context,AlarmDisplay.class);
-        alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
-        alarmManager.setExact(AlarmManager.RTC,time,alarmIntent);
-        //https://developer.android.com/reference/android/app/AlarmManager.html
-    }
+//    void setAlarm1(long time, String message, boolean[] repeatDay, String timezone, Location loc)
+//    {
+//        PendingIntent alarmIntent;
+//        AlarmManager alarmMgr  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(context,AlarmDisplay.class);
+//        alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
+//        alarmManager.setExact(AlarmManager.RTC,time,alarmIntent);
+//        //https://developer.android.com/reference/android/app/AlarmManager.html
+//    }
 }

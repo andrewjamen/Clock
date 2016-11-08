@@ -20,5 +20,5 @@
         <activity android:name=".LocationAlarm" />
         <activity android:name=".SetTimer"></activity>
     </application>
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 </manifest>

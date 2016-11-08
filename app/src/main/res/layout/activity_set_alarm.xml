@@ -10,9 +10,149 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="amen.clock.SetAlarm">
 
+    <DatePicker
+        android:layout_height="75dp"
+        android:id="@+id/datePicker"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:elevation="0dp"
+        android:fadeScrollbars="true"
+        android:layout_width="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
     <TimePicker
         android:layout_width="wrap_content"
+        android:layout_height="75dp"
+        android:id="@+id/timePicker"
+
+        android:timePickerMode="spinner"
+        android:layout_below="@+id/datePicker"
+        android:layout_alignRight="@+id/datePicker"
+        android:layout_alignEnd="@+id/datePicker" />
+
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="text"
+        android:text="Alarm Message"
+        android:ems="10"
+        android:layout_marginTop="16dp"
+        android:id="@+id/alarmMessage"
+        android:layout_below="@+id/timePicker"
         android:layout_centerHorizontal="true"
-        android:id="@+id/timePicker" />
+        android:cursorVisible="false"
+        android:editable="true" />
+
+    <CheckBox
+        android:text="Saturday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/saturdayCheckBox"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/checkBox6"
+        android:layout_alignStart="@+id/checkBox6"
+        android:layout_marginBottom="40dp" />
+
+    <CheckBox
+        android:text="Friday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fridayCheckBox"
+        android:layout_marginBottom="26dp"
+        android:layout_alignBottom="@+id/saturdayCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <CheckBox
+        android:text="Wednesday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wednesdayCheckBox"
+        android:layout_above="@+id/saturdayCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="43dp" />
+
+    <CheckBox
+        android:text="Thursday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/thursdayCheckBox"
+        android:layout_below="@+id/tuesdayCheckBox"
+        android:layout_alignLeft="@+id/mondayCheckBox"
+        android:layout_alignStart="@+id/mondayCheckBox"
+        android:layout_marginTop="23dp" />
+
+    <CheckBox
+        android:text="Sunday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sundayCheckBox"
+        android:layout_above="@+id/mondayCheckBox"
+        android:layout_alignLeft="@+id/mondayCheckBox"
+        android:layout_alignStart="@+id/mondayCheckBox" />
+
+    <CheckBox
+        android:text="Tuesday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tuesdayCheckBox"
+        android:layout_above="@+id/wednesdayCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <CheckBox
+        android:text="Monday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mondayCheckBox"
+        android:layout_above="@+id/tuesdayCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:text="Repeat"
+        android:ems="10"
+        android:layout_above="@+id/sundayCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/repeatText"
+        android:clickable="false" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Time Zone"
+        android:ems="10"
+        android:layout_alignTop="@+id/repeatText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/timeZoneTextField" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeZoneTextField"
+        android:layout_toRightOf="@+id/wednesdayCheckBox"
+        android:layout_toEndOf="@+id/wednesdayCheckBox"
+        android:layout_marginLeft="51dp"
+        android:layout_marginStart="51dp"
+        android:id="@+id/timeZoneSpinner" />
+
+    <Button
+        android:text="Add Alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/wednesdayCheckBox"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="18dp"
+        android:layout_marginEnd="18dp"
+        android:id="@+id/setAlarmButton" />
+
 </RelativeLayout>

@@ -30,7 +30,8 @@ public class SetAlarm extends AppCompatActivity {
     DatePicker datePicker;
     EditText alarmMessage;
     String alarmMessageText;
-    String timeZoneSelection;
+    int timeZoneSelection;
+    int centralTimeZoneIndex;
     boolean sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB;
     AlarmManager alarmManager;
     CheckBox sunday, monday, tuesday, wednesday, thursday, friday, saturday;
@@ -74,6 +75,7 @@ public class SetAlarm extends AppCompatActivity {
             if(TZ1.get(i).equals(TimeZone.getDefault().getDisplayName())) {
                 timeZoneSpinner.setSelection(i);
             } }
+        centralTimeZoneIndex = timeZoneSpinner.getSelectedItemPosition() + 1;
 
         //Sets Time and date picker default values to current time
         Calendar cal = Calendar.getInstance();
@@ -140,7 +142,7 @@ public class SetAlarm extends AppCompatActivity {
                 boolean[] rptDays = {sundayCB,mondayCB,tuesdayCB,wednesdayCB,thursdayCB,fridayCB,saturdayCB};
 
                 //get timezone selection (not exactly sure how this output will look, haven't tested)
-                timeZoneSelection = timeZoneSpinner.getSelectedItem().toString();
+                timeZoneSelection = timeZoneSpinner.getSelectedItemPosition() + 1;
 
                 //get location of phone
                 locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

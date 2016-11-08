@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 public class AlarmList extends AppCompatActivity {
 
-
+// display by ArrayAdapter<> ?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

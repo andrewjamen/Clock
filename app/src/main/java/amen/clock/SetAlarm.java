@@ -31,13 +31,13 @@ public class SetAlarm extends AppCompatActivity {
     EditText alarmMessage;
     String alarmMessageText;
     int timeZoneSelection;
-    int centralTimeZoneIndex;
     boolean sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB;
     AlarmManager alarmManager;
     CheckBox sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     Spinner timeZoneSpinner;
     LocationManager locationMgr;
     Location location;
+
 
     //On Create method
     @Override
@@ -58,24 +58,46 @@ public class SetAlarm extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        String[]TZ = TimeZone.getAvailableIDs();
-        ArrayList<String> TZ1 = new ArrayList<>();
-        for(int i = 0; i < TZ.length; i++) {
-            if(!(TZ1.contains(TimeZone.getTimeZone(TZ[i]).getDisplayName()))) {
-                TZ1.add(TimeZone.getTimeZone(TZ[i]).getDisplayName());
-            }
-        }
-        for(int i = 0; i < TZ1.size(); i++) {
-            adapter.add(TZ1.get(i));
+
+        ArrayList<String> TZ = new ArrayList<>();
+
+
+        TZ.add("Nieu Time");    //GMT-11
+        TZ.add("Hawaiian Standard Time"); //GMT-10
+        TZ.add("Alaskan Standard Time");
+        TZ.add("Pacific Standard Time");
+        TZ.add("Mountain Standard Time");
+        TZ.add("Central Standard Time"); //GMT-6
+        TZ.add("Eastern Standard Time");
+        TZ.add("Atlantic Standard Time"); //GMT-4
+        TZ.add("West Greenland Time");  //GMT-3
+        TZ.add("South Georgia Time");
+        TZ.add("East Greenland Time");
+        TZ.add("Greenwich Mean Time"); //GMT
+        TZ.add("Central European Time");    //GMT+01
+        TZ.add("Eastern European Time");
+        TZ.add("Moscow Standard Time");
+        TZ.add("Gulf Standard Time");   //GMT+4
+        TZ.add("Yekaterinburg Standard Time");
+        TZ.add("Bangladesh Standard Time");
+        TZ.add("Krasnoyarsk Time");
+        TZ.add("China Standard Time");    //GMT+8
+        TZ.add("Japan Standard Time");  //GMT+9
+        TZ.add("Papua New Guinea Time");
+        TZ.add("Pohnpei Standard Time");    //GMT+11
+        TZ.add("Tuvalu Time");  //GMT+12
+
+
+        for(int i = 0; i < TZ.size(); i++) {
+            adapter.add(TZ.get(i));
         }
 
         timeZoneSpinner.setAdapter(adapter);
 
-        for(int i = 0; i < TZ1.size(); i++) {
-            if(TZ1.get(i).equals(TimeZone.getDefault().getDisplayName())) {
-                timeZoneSpinner.setSelection(i);
-            } }
-        centralTimeZoneIndex = timeZoneSpinner.getSelectedItemPosition() + 1;
+        timeZoneSpinner.setSelection(5);
+
+
+
 
         //Sets Time and date picker default values to current time
         Calendar cal = Calendar.getInstance();
@@ -89,16 +111,20 @@ public class SetAlarm extends AppCompatActivity {
 
             @Override
             public void onClick(View v){
+
                 //get inputs from user
                 int hour = timePicker.getHour();
                 int minute = timePicker.getMinute();
                 int month = datePicker.getMonth();
                 int dayOfYr = datePicker.getDayOfMonth();
                 int year = datePicker.getYear();
+
+
                 //Convert time/date into a time in milliseconds
                 Calendar alarmCal = Calendar.getInstance();
                 alarmCal.set(year,month,dayOfYr,hour,minute,0);
-                long alarmTime = alarmCal.getTimeInMillis();
+                double alarmTime = alarmCal.getTimeInMillis();
+
 
                 //get alarm message
                 alarmMessageText = alarmMessage.getText().toString();
@@ -142,17 +168,73 @@ public class SetAlarm extends AppCompatActivity {
                 boolean[] rptDays = {sundayCB,mondayCB,tuesdayCB,wednesdayCB,thursdayCB,fridayCB,saturdayCB};
 
                 //get timezone selection (not exactly sure how this output will look, haven't tested)
-                timeZoneSelection = timeZoneSpinner.getSelectedItemPosition() + 1;
+                timeZoneSelection = timeZoneSpinner.getSelectedItemPosition();
+
+                double hrDif = 0;
+
+                double convert = Math.pow((3.6*10),6);
+
+                if (timeZoneSelection != 5){
+
+                    switch (timeZoneSelection){
+                        case 0: hrDif = -5 * convert;
+                            break;
+                        case 1: hrDif = -4 *convert;
+                            break;
+                        case 2: hrDif = -3 *convert;
+                            break;
+                        case 3: hrDif = -2 *convert;
+                            break;
+                        case 4: hrDif = -1 *convert;
+                            break;
+                        case 6: hrDif = 1 *convert;
+                            break;
+                        case 7: hrDif = 2 *convert;
+                            break;
+                        case 8: hrDif = 3 *convert;
+                            break;
+                        case 9: hrDif = 4 *convert;
+                            break;
+                        case 10: hrDif = 5 *convert;
+                            break;
+                        case 11: hrDif = 6 *convert;
+                            break;
+                        case 12: hrDif = 7 *convert;
+                            break;
+                        case 13: hrDif = 8 *convert;
+                            break;
+                        case 14: hrDif = 9 *convert;
+                            break;
+                        case 15: hrDif = 10 *convert;
+                            break;
+                        case 16: hrDif = 11 *convert;
+                            break;
+                        case 17: hrDif = 12 *convert;
+                            break;
+                        case 18: hrDif = 13 *convert;
+                            break;
+                        case 19: hrDif = 14 *convert;
+                            break;
+                        case 20: hrDif = 15 *convert;
+                            break;
+                        case 21: hrDif = 16 *convert;
+                            break;
+                        case 22: hrDif = 17 *convert;
+                            break;
+                        case 23: hrDif = 18 *convert;
+                            break;
+                    }
+
+                    alarmTime = alarmTime + hrDif;
+
+                }
 
                 //get location of phone
                 locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 //location = locationMgr.getLastKnownLocation(/*provider*/);
 
+                Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location);
 
-
-                //send to setAlarm1 method. This could probably just go down in here, if it isn't too much code.
-                //Parameters of this method are prety straight forward (look at method header)
-                //setAlarm1(alarmTime,alarmMessageText,rptDays,timeZoneSelection,location);
             }
 
 
@@ -164,15 +246,4 @@ public class SetAlarm extends AppCompatActivity {
 
     }
 
-    // TODO: create alarm class?
-
-//    void setAlarm1(long time, String message, boolean[] repeatDay, String timezone, Location loc)
-//    {
-//        PendingIntent alarmIntent;
-//        AlarmManager alarmMgr  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-//        Intent intent = new Intent(context,AlarmDisplay.class);
-//        alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
-//        alarmManager.setExact(AlarmManager.RTC,time,alarmIntent);
-//        //https://developer.android.com/reference/android/app/AlarmManager.html
-//    }
 }

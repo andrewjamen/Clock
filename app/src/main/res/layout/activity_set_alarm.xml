@@ -35,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:text="Alarm Message"
         android:ems="10"
         android:layout_marginTop="16dp"
         android:id="@+id/alarmMessage"
@@ -119,7 +118,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/repeatText"
-        android:clickable="false" />
+        android:clickable="false"
+        android:textColor="000000"
+        android:textStyle="normal|bold" />
 
     <TextView
         android:layout_width="100dp"
@@ -130,7 +131,9 @@
         android:layout_alignTop="@+id/repeatText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/timeZoneTextField" />
+        android:id="@+id/timeZoneTextField"
+        android:textStyle="normal|bold"
+        android:textColor="@color/cast_expanded_controller_background_color" />
 
     <Spinner
         android:layout_width="match_parent"

@@ -10,7 +10,7 @@ import android.content.Context;
 public class LocationAlarm extends AppCompatActivity {
 
 
-    LocationManager locationManager;
+    LocationManager locationMgr;
 
     Criteria criteria;
 
@@ -30,11 +30,15 @@ public class LocationAlarm extends AppCompatActivity {
         setContentView(R.layout.activity_location_alarm);
 
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        criteria = new Criteria();
-        //  locationManager.getLastKnownLocation(provider);
+        locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        location = locationMgr.getLastKnownLocation(/*provider*/);
 
 
+
+        //  criteria = new Criteria();
+        //  locaitonManager.requestLocationUpdates();
+        // locationManager.addProximityAlert();
+        //  locationManager.re
 
 
 

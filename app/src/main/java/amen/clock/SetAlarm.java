@@ -9,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +35,8 @@ public class SetAlarm extends AppCompatActivity {
     AlarmManager alarmManager;
     CheckBox sunday, monday, tuesday, wednesday, thursday, friday, saturday;
     Spinner timeZoneSpinner;
-    LocationManager location;
+    LocationManager locationMgr;
+    Location location;
 
     //On Create method
     @Override
@@ -52,7 +54,6 @@ public class SetAlarm extends AppCompatActivity {
 
 
         //This fills the timezone spinner with all the timezones
-        //http://stackoverflow.com/questions/3407582/launch-time-zone-list-in-android-for-pick-result
         ArrayAdapter<CharSequence> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -78,7 +79,8 @@ public class SetAlarm extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         timePicker.setHour(cal.get(Calendar.HOUR));
         timePicker.setMinute(cal.get(Calendar.MINUTE));
-        datePicker.init(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH),null);
+        datePicker.init(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH),null);
 
         //On click listener to button
         setAlarm.setOnClickListener(new View.OnClickListener(){
@@ -141,7 +143,10 @@ public class SetAlarm extends AppCompatActivity {
                 timeZoneSelection = timeZoneSpinner.getSelectedItem().toString();
 
                 //get location of phone
-                location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                location = locationMgr.getLastKnownLocation(/*provider*/);
+
+
 
                 //send to setAlarm1 method. This could probably just go down in here, if it isn't too much code.
                 //Parameters of this method are prety straight forward (look at method header)
@@ -157,7 +162,9 @@ public class SetAlarm extends AppCompatActivity {
 
     }
 
-    void setAlarm1(long time, String message, boolean[] repeatDay, String timezone, LocationManager loc)
+    // TODO: create alarm class?
+
+    void setAlarm1(long time, String message, boolean[] repeatDay, String timezone, Location loc)
     {
         PendingIntent alarmIntent;
         AlarmManager alarmMgr  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);

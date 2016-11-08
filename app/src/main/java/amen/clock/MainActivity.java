@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         locationAlarm = (Button) findViewById(R.id.locationAlarm);
         alarmList = (Button) findViewById(R.id.viewAlarms);
 
+
         setAlarms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

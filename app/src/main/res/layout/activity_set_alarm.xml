@@ -50,8 +50,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/saturdayCheckBox"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/checkBox6"
-        android:layout_alignStart="@+id/checkBox6"
         android:layout_marginBottom="40dp" />
 
     <CheckBox

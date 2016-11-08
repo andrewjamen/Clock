@@ -159,10 +159,11 @@ public class SetAlarm extends AppCompatActivity {
 
     void setAlarm1(long time, String message, boolean[] repeatDay, String timezone, LocationManager loc)
     {
-        /*PendingIntent alarmIntent;
+        PendingIntent alarmIntent;
         AlarmManager alarmMgr  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context,AlarmDisplay.class);
         alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
-        alarmManager.setExact(AlarmManager.RTC,time,alarmIntent);*/
+        alarmManager.setExact(AlarmManager.RTC,time,alarmIntent);
+        //https://developer.android.com/reference/android/app/AlarmManager.html
     }
 }

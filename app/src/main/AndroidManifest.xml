@@ -16,7 +16,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".AlarmList" />
-        <activity android:name=".SetAlarm"></activity>
+        <activity android:name=".SetAlarm" />
+        <activity android:name=".LocationAlarm" />
+        <activity android:name=".SetTimer"></activity>
     </application>
 
 </manifest>

@@ -13,31 +13,62 @@
     <TextClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:id="@+id/currentTime"
+        android:textSize="70sp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="27dp"
-        android:id="@+id/textClock2"
-        android:layout_toLeftOf="@+id/setTimer" />
-
-    <Button
-        android:text="Set Alarms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="146dp"
-        android:id="@+id/setAlarms"
-        android:layout_below="@+id/textClock2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="Set Timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/setAlarms"
+        android:id="@+id/setTimer"
+        android:textSize="24sp"
+        android:textStyle="normal|bold"
+        android:layout_alignBaseline="@+id/setAlarms"
+        android:layout_alignBottom="@+id/setAlarms"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Set Alarms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setAlarms"
+        android:textStyle="normal|bold"
+        android:textSize="24sp"
+        android:layout_below="@+id/currentTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="108dp"/>
+
+
+    <Button
+        android:text="View Alarms"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewAlarms"
+        android:layout_below="@+id/setAlarms"
+        android:layout_alignRight="@+id/setAlarms"
+        android:layout_alignEnd="@+id/setAlarms"
+        android:layout_alignParentBottom="false"
+        android:textStyle="normal|bold"
+        android:textSize="24sp"
+        android:layout_width="wrap_content" />
+
+    <Button
+        android:text="Location Alarm"
+        android:id="@+id/locationAlarm"
+        android:textSize="24sp"
+        android:textStyle="normal|bold"
+        android:layout_alignBaseline="@+id/viewAlarms"
+        android:layout_alignBottom="@+id/viewAlarms"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="46dp"
-        android:layout_marginEnd="46dp"
-        android:id="@+id/setTimer" />
+        android:layout_toEndOf="@+id/viewAlarms"
+        android:layout_toRightOf="@+id/viewAlarms"
+        android:layout_alignLeft="@+id/setTimer"
+        android:layout_alignStart="@+id/setTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

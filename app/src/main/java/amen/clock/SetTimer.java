@@ -120,6 +120,9 @@ public class SetTimer extends Activity implements OnClickListener {
         //Builds notification and issues it to the device
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(uniqueID, notification.build());
+
+
+        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, (long) alarmTime, pendingIntent);
     }
 
 

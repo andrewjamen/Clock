@@ -92,8 +92,6 @@ public class SetTimer extends Activity implements OnClickListener {
             timeElapsed = startTime - millisUntilFinished;
             timeElapsedView.setText("Time Elapsed: " +
                     String.valueOf(timeElapsed/1000 + " seconds"));
-
-            finish();
         }
     }
 

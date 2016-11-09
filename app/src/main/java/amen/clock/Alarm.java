@@ -9,27 +9,41 @@ import android.location.Location;
 
 public class Alarm {
 
-    private long time;
+    private double time;
     private String message;
     private boolean[] rptDay;
-    private int timeZone;
     private Location location;
 
 
 
-    public Alarm(long time, String message, boolean[] rptDay, int timeZone, Location location){
-
+    public Alarm(double time, String message, boolean[] rptDay, Location location){
+        this.time = time;
+        this.message = message;
+        this.rptDay = rptDay;
+        this.location = location;
     }
 
 
-    public Alarm(long time, String message, Location location){
-
+    public Alarm(double time, String message, Location location){
+        this.time = time;
+        this.message = message;
+        this.location = location;
     }
 
-    public Alarm(long time, Location location){
-
+    public Alarm(double time, Location location){
+        this.time = time;
+        this.location = location;
     }
 
+//    void setAlarm()
+//    {
+//        PendingIntent alarmIntent;
+//        AlarmManager alarmMgr  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(context,AlarmDisplay.class);
+//        alarmIntent = PendingIntent.getBroadcast(context,0,intent,0);
+//        alarmManager.setExact(AlarmManager.RTC,time,alarmIntent);
+//        //https://developer.android.com/reference/android/app/AlarmManager.html
+//    }
 
 
 

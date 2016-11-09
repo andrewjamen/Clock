@@ -25,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="75dp"
         android:id="@+id/timePicker"
-
         android:timePickerMode="spinner"
         android:layout_below="@+id/datePicker"
         android:layout_alignRight="@+id/datePicker"
@@ -35,7 +34,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:text="Alarm Message"
         android:ems="10"
         android:layout_marginTop="16dp"
         android:id="@+id/alarmMessage"
@@ -61,16 +59,6 @@
         android:layout_alignBottom="@+id/saturdayCheckBox"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <CheckBox
-        android:text="Wednesday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/wednesdayCheckBox"
-        android:layout_above="@+id/saturdayCheckBox"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="43dp" />
 
     <CheckBox
         android:text="Thursday"
@@ -119,7 +107,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/repeatText"
-        android:clickable="false" />
+        android:clickable="false"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:textStyle="normal|bold" />
 
     <TextView
         android:layout_width="100dp"
@@ -130,7 +120,9 @@
         android:layout_alignTop="@+id/repeatText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/timeZoneTextField" />
+        android:id="@+id/timeZoneTextField"
+        android:textStyle="normal|bold"
+        android:textColor="@color/cast_expanded_controller_background_color" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -152,5 +144,15 @@
         android:layout_marginRight="18dp"
         android:layout_marginEnd="18dp"
         android:id="@+id/setAlarmButton" />
+
+    <CheckBox
+        android:text="Wednesday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wednesdayCheckBox"
+        android:layout_marginBottom="19dp"
+        android:layout_above="@+id/fridayCheckBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

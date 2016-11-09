@@ -2,6 +2,7 @@ package amen.clock;
 //https://developer.android.com/training/scheduling/alarms.html
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 import java.util.TimeZone;
 
 import android.app.AlarmManager;
@@ -20,23 +21,28 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.location.Criteria;
 
 
 
 public class SetAlarm extends AppCompatActivity {
 
     //Set globals
-    TimePicker timePicker;
-    DatePicker datePicker;
-    EditText alarmMessage;
-    String alarmMessageText;
-    int timeZoneSelection;
-    boolean sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB;
-    AlarmManager alarmManager;
-    CheckBox sunday, monday, tuesday, wednesday, thursday, friday, saturday;
-    Spinner timeZoneSpinner;
-    LocationManager locationMgr;
-    Location location;
+    private TimePicker timePicker;
+    private DatePicker datePicker;
+    private EditText alarmMessage;
+    private String alarmMessageText;
+    private int timeZoneSelection;
+    private boolean sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB;
+    private AlarmManager alarmManager;
+    private CheckBox sunday, monday, tuesday, wednesday, thursday, friday, saturday;
+    private Spinner timeZoneSpinner;
+    private LocationManager locationMgr;
+    private Location location;
+    private Criteria criteria;
+    private String provider;
+    private Intent intent;
+    private PendingIntent pendingIntent;
 
 
     //On Create method
@@ -52,6 +58,9 @@ public class SetAlarm extends AppCompatActivity {
         alarmMessage = (EditText) findViewById(R.id.alarmMessage);
         timeZoneSpinner = (Spinner) findViewById(R.id.timeZoneSpinner);
         Button setAlarm = (Button) findViewById(R.id.setAlarmButton);
+
+
+
 
 
         //This fills the timezone spinner with all the timezones
@@ -128,6 +137,7 @@ public class SetAlarm extends AppCompatActivity {
 
                 //get alarm message
                 alarmMessageText = alarmMessage.getText().toString();
+
 
                 //get repeat days
                 if(sunday.isChecked())
@@ -229,12 +239,44 @@ public class SetAlarm extends AppCompatActivity {
 
                 }
 
-                //get location of phone
-                locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                //location = locationMgr.getLastKnownLocation(/*provider*/);
+
+                // Get the location manager
+                locationMgr = (LocationManager)
+                        getSystemService(Context.LOCATION_SERVICE);
+                // Define the criteria how to select the location provider
+                criteria = new Criteria();
+                criteria.setAccuracy(Criteria.ACCURACY_FINE);\
+                provider = locationMgr.getBestProvider(criteria, false);
+                Location location = locationMgr.getLastKnownLocation(provider);
+
+                /*
+                From Rishi
+
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED){
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    } else {
+
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                11);
+                    }
+                }else {
+                    Toast.makeText(this, "" + Manifest.permission.ACCESS_FINE_LOCATION + " is already granted.", Toast.LENGTH_SHORT).show();
+                }
+                criteria.setCostAllowed(false);
+                 */
+
+
 
                 Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location);
 
+                intent = new Intent(SetAlarm.this, AlarmReceiver.class);
+                pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                alarmManager.set(AlarmManager.RTC, (long) alarmTime, pendingIntent);
             }
 
 
@@ -244,6 +286,10 @@ public class SetAlarm extends AppCompatActivity {
 
 
 
+    }
+
+    public String getMessage(){
+        return alarmMessageText;
     }
 
 }

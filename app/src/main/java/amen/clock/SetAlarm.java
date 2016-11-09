@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,6 +26,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.location.Criteria;
+
+import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
 
 
 public class SetAlarm extends AppCompatActivity {
@@ -43,6 +48,9 @@ public class SetAlarm extends AppCompatActivity {
     private String provider;
     private Intent intent;
     private PendingIntent pendingIntent;
+
+    NotificationCompat.Builder notification;
+    private static final int uniqueID = 112211;
 
 
     //On Create method
@@ -65,6 +73,9 @@ public class SetAlarm extends AppCompatActivity {
         thursday = (CheckBox) findViewById(R.id.thursdayCheckBox);
         friday = (CheckBox) findViewById(R.id.fridayCheckBox);
         saturday = (CheckBox) findViewById(R.id.saturdayCheckBox);
+
+        notification = new  NotificationCompat.Builder(this);
+        notification.setAutoCancel(true);
 
         //This fills the timezone spinner with all the timezones
         ArrayAdapter<CharSequence> adapter =
@@ -326,12 +337,29 @@ public class SetAlarm extends AppCompatActivity {
                 }
                 criteria.setCostAllowed(false);
                  */
-                
-                Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location);
+
+                //Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location); Not used, needed for array but still
+
+                notification.setSmallIcon(R.drawable.clock);
+                notification.setTicker(alarmMessageText);
+                notification.setWhen(System.currentTimeMillis());
+                notification.setContentTitle("Alarm Clock!");
+                notification.setContentText(alarmMessageText);
+                notification.setDefaults(Notification.DEFAULT_ALL);
+                notification.setPriority(PRIORITY_HIGH);
+
+
+                Intent intent2 = new Intent(this, MainActivity.class);
+                PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
+                notification.setContentIntent(pendingIntent2);
+
+                NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                nm.notify(uniqueID, notification.build());
+
+
                 intent = new Intent(SetAlarm.this, AlarmReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
-
 
                 Intent main = new Intent(SetAlarm.this, MainActivity.class);
                 startActivity(main);

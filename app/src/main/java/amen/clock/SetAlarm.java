@@ -60,7 +60,6 @@ public class SetAlarm extends AppCompatActivity {
         setContentView(R.layout.activity_set_alarm);
 
         //Set spinners and stuff
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE); //Already there
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         alarmMessage = (EditText) findViewById(R.id.alarmMessage);
@@ -194,7 +193,7 @@ public class SetAlarm extends AppCompatActivity {
 
                 double hrDif = 0;
 
-                double convert = Math.pow((3.6 * 10), 6);
+                double convert = 3.6 * Math.pow(10, 6);
 
                 if (timeZoneSelection != 5) {
 
@@ -349,14 +348,14 @@ public class SetAlarm extends AppCompatActivity {
                 notification.setPriority(PRIORITY_HIGH);
 
 
-                Intent intent2 = new Intent(this, MainActivity.class);
-                PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
+                Intent intent2 = new Intent(SetAlarm.this, MainActivity.class);
+                PendingIntent pendingIntent2 = PendingIntent.getActivity(SetAlarm.this, 0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
                 notification.setContentIntent(pendingIntent2);
 
                 NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 nm.notify(uniqueID, notification.build());
 
-
+                alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 intent = new Intent(SetAlarm.this, AlarmReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);

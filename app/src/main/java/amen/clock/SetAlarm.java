@@ -52,7 +52,7 @@ public class SetAlarm extends AppCompatActivity {
         setContentView(R.layout.activity_set_alarm);
 
         //Set spinners and stuff
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE); //Already there
+
         timePicker = (TimePicker) findViewById(R.id.timePicker);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         alarmMessage = (EditText) findViewById(R.id.alarmMessage);
@@ -183,7 +183,7 @@ public class SetAlarm extends AppCompatActivity {
 
                 double hrDif = 0;
 
-                double convert = Math.pow((3.6 * 10), 6);
+                double convert = 3.6 * Math.pow(10, 6);
 
                 if (timeZoneSelection != 5) {
 
@@ -331,8 +331,11 @@ public class SetAlarm extends AppCompatActivity {
 
                 Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location);
 
-                intent = new Intent(SetAlarm.this, AlarmReceiver.class);
-                pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
 
                 alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
 

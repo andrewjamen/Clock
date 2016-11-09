@@ -1,6 +1,7 @@
 package amen.clock;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
 
 
 public class SetTimer extends Activity implements OnClickListener {
@@ -92,8 +95,6 @@ public class SetTimer extends Activity implements OnClickListener {
             timeElapsed = startTime - millisUntilFinished;
             timeElapsedView.setText("Time Elapsed: " +
                     String.valueOf(timeElapsed/1000 + " seconds"));
-
-            finish();
         }
     }
 
@@ -108,6 +109,8 @@ public class SetTimer extends Activity implements OnClickListener {
         notification.setWhen(System.currentTimeMillis());
         notification.setContentTitle("Timer is up!!!");
         notification.setContentText("Click here to go to app.");
+        notification.setDefaults(Notification.DEFAULT_ALL);
+        notification.setPriority(PRIORITY_HIGH);
 
 
         Intent intent2 = new Intent(this, MainActivity.class);

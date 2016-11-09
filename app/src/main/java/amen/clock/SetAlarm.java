@@ -1,16 +1,17 @@
 package amen.clock;
 //https://developer.android.com/training/scheduling/alarms.html
+
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Set;
-import java.util.TimeZone;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.location.Criteria;
-
 
 
 public class SetAlarm extends AppCompatActivity {
@@ -60,9 +60,6 @@ public class SetAlarm extends AppCompatActivity {
         Button setAlarm = (Button) findViewById(R.id.setAlarmButton);
 
 
-
-
-
         //This fills the timezone spinner with all the timezones
         ArrayAdapter<CharSequence> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
@@ -97,7 +94,7 @@ public class SetAlarm extends AppCompatActivity {
         TZ.add("Tuvalu Time");  //GMT+12
 
 
-        for(int i = 0; i < TZ.size(); i++) {
+        for (int i = 0; i < TZ.size(); i++) {
             adapter.add(TZ.get(i));
         }
 
@@ -106,20 +103,18 @@ public class SetAlarm extends AppCompatActivity {
         timeZoneSpinner.setSelection(5);
 
 
-
-
         //Sets Time and date picker default values to current time
         Calendar cal = Calendar.getInstance();
         timePicker.setHour(cal.get(Calendar.HOUR));
         timePicker.setMinute(cal.get(Calendar.MINUTE));
-        datePicker.init(cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH),null);
+        datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH), null);
 
         //On click listener to button
-        setAlarm.setOnClickListener(new View.OnClickListener(){
+        setAlarm.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
 
                 //get inputs from user
                 int hour = timePicker.getHour();
@@ -131,7 +126,7 @@ public class SetAlarm extends AppCompatActivity {
 
                 //Convert time/date into a time in milliseconds
                 Calendar alarmCal = Calendar.getInstance();
-                alarmCal.set(year,month,dayOfYr,hour,minute,0);
+                alarmCal.set(year, month, dayOfYr, hour, minute, 0);
                 double alarmTime = alarmCal.getTimeInMillis();
 
 
@@ -140,98 +135,121 @@ public class SetAlarm extends AppCompatActivity {
 
 
                 //get repeat days
-                if(sunday.isChecked())
+                if (sunday.isChecked())
                     sundayCB = true;
                 else
                     sundayCB = false;
 
-                if(monday.isChecked())
+                if (monday.isChecked())
                     mondayCB = true;
                 else
                     mondayCB = false;
 
-                if(tuesday.isChecked())
+                if (tuesday.isChecked())
                     tuesdayCB = true;
                 else
                     tuesdayCB = false;
 
-                if(wednesday.isChecked())
+                if (wednesday.isChecked())
                     wednesdayCB = true;
                 else
                     wednesdayCB = false;
 
-                if(thursday.isChecked())
+                if (thursday.isChecked())
                     thursdayCB = true;
                 else
                     thursdayCB = false;
 
-                if(friday.isChecked())
+                if (friday.isChecked())
                     fridayCB = true;
                 else
                     fridayCB = false;
 
-                if(saturday.isChecked())
+                if (saturday.isChecked())
                     saturdayCB = true;
                 else
                     saturdayCB = false;
                 //Save repeats days into boolean array, sunday - saturday
-                boolean[] rptDays = {sundayCB,mondayCB,tuesdayCB,wednesdayCB,thursdayCB,fridayCB,saturdayCB};
+                boolean[] rptDays = {sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB};
 
                 //get timezone selection (not exactly sure how this output will look, haven't tested)
                 timeZoneSelection = timeZoneSpinner.getSelectedItemPosition();
 
                 double hrDif = 0;
 
-                double convert = Math.pow((3.6*10),6);
+                double convert = Math.pow((3.6 * 10), 6);
 
-                if (timeZoneSelection != 5){
+                if (timeZoneSelection != 5) {
 
-                    switch (timeZoneSelection){
-                        case 0: hrDif = -5 * convert;
+                    switch (timeZoneSelection) {
+                        case 0:
+                            hrDif = -5 * convert;
                             break;
-                        case 1: hrDif = -4 *convert;
+                        case 1:
+                            hrDif = -4 * convert;
                             break;
-                        case 2: hrDif = -3 *convert;
+                        case 2:
+                            hrDif = -3 * convert;
                             break;
-                        case 3: hrDif = -2 *convert;
+                        case 3:
+                            hrDif = -2 * convert;
                             break;
-                        case 4: hrDif = -1 *convert;
+                        case 4:
+                            hrDif = -1 * convert;
                             break;
-                        case 6: hrDif = 1 *convert;
+                        case 6:
+                            hrDif = 1 * convert;
                             break;
-                        case 7: hrDif = 2 *convert;
+                        case 7:
+                            hrDif = 2 * convert;
                             break;
-                        case 8: hrDif = 3 *convert;
+                        case 8:
+                            hrDif = 3 * convert;
                             break;
-                        case 9: hrDif = 4 *convert;
+                        case 9:
+                            hrDif = 4 * convert;
                             break;
-                        case 10: hrDif = 5 *convert;
+                        case 10:
+                            hrDif = 5 * convert;
                             break;
-                        case 11: hrDif = 6 *convert;
+                        case 11:
+                            hrDif = 6 * convert;
                             break;
-                        case 12: hrDif = 7 *convert;
+                        case 12:
+                            hrDif = 7 * convert;
                             break;
-                        case 13: hrDif = 8 *convert;
+                        case 13:
+                            hrDif = 8 * convert;
                             break;
-                        case 14: hrDif = 9 *convert;
+                        case 14:
+                            hrDif = 9 * convert;
                             break;
-                        case 15: hrDif = 10 *convert;
+                        case 15:
+                            hrDif = 10 * convert;
                             break;
-                        case 16: hrDif = 11 *convert;
+                        case 16:
+                            hrDif = 11 * convert;
                             break;
-                        case 17: hrDif = 12 *convert;
+                        case 17:
+                            hrDif = 12 * convert;
                             break;
-                        case 18: hrDif = 13 *convert;
+                        case 18:
+                            hrDif = 13 * convert;
                             break;
-                        case 19: hrDif = 14 *convert;
+                        case 19:
+                            hrDif = 14 * convert;
                             break;
-                        case 20: hrDif = 15 *convert;
+                        case 20:
+                            hrDif = 15 * convert;
                             break;
-                        case 21: hrDif = 16 *convert;
+                        case 21:
+                            hrDif = 16 * convert;
                             break;
-                        case 22: hrDif = 17 *convert;
+                        case 22:
+                            hrDif = 17 * convert;
                             break;
-                        case 23: hrDif = 18 *convert;
+                        case 23:
+                            hrDif = 18 * convert;
                             break;
                     }
 
@@ -245,8 +263,42 @@ public class SetAlarm extends AppCompatActivity {
                         getSystemService(Context.LOCATION_SERVICE);
                 // Define the criteria how to select the location provider
                 criteria = new Criteria();
-                criteria.setAccuracy(Criteria.ACCURACY_FINE);\
+                criteria.setAccuracy(Criteria.ACCURACY_FINE);
                 provider = locationMgr.getBestProvider(criteria, false);
+
+                //Auto generated permission check start
+                if (ActivityCompat.checkSelfPermission(SetAlarm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SetAlarm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                if (ActivityCompat.checkSelfPermission(SetAlarm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SetAlarm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                if (ActivityCompat.checkSelfPermission(SetAlarm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SetAlarm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+
+                //Auto generated permission check end
                 Location location = locationMgr.getLastKnownLocation(provider);
 
                 /*
@@ -276,7 +328,7 @@ public class SetAlarm extends AppCompatActivity {
                 intent = new Intent(SetAlarm.this, AlarmReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                alarmManager.set(AlarmManager.RTC, (long) alarmTime, pendingIntent);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
             }
 
 

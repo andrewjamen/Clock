@@ -35,10 +35,7 @@ public class Alarm {
         this.location = location;
     }
 
-
-
-
-//    void setAlarm1(long time, String message, boolean[] repeatDay, String timezone, Location loc)
+//    void setAlarm()
 //    {
 //        PendingIntent alarmIntent;
 //        AlarmManager alarmMgr  = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);

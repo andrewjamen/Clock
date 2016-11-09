@@ -58,7 +58,13 @@ public class SetAlarm extends AppCompatActivity {
         alarmMessage = (EditText) findViewById(R.id.alarmMessage);
         timeZoneSpinner = (Spinner) findViewById(R.id.timeZoneSpinner);
         Button setAlarm = (Button) findViewById(R.id.setAlarmButton);
-
+        sunday = (CheckBox) findViewById(R.id.sundayCheckBox);
+        monday = (CheckBox) findViewById(R.id.mondayCheckBox);
+        tuesday = (CheckBox) findViewById(R.id.tuesdayCheckBox);
+        wednesday = (CheckBox) findViewById(R.id.wednesdayCheckBox);
+        thursday = (CheckBox) findViewById(R.id.thursdayCheckBox);
+        friday = (CheckBox) findViewById(R.id.fridayCheckBox);
+        saturday = (CheckBox) findViewById(R.id.saturdayCheckBox);
 
         //This fills the timezone spinner with all the timezones
         ArrayAdapter<CharSequence> adapter =
@@ -299,7 +305,7 @@ public class SetAlarm extends AppCompatActivity {
                 }
 
                 //Auto generated permission check end
-                Location location = locationMgr.getLastKnownLocation(provider);
+                location = locationMgr.getLastKnownLocation(provider);
 
                 /*
                 From Rishi

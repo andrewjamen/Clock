@@ -29,6 +29,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.security.Permission;
 
 public class LocationAlarm extends AppCompatActivity {
+    /*
     private TextView latitude;
     private TextView longitude;
     private TextView choice;
@@ -178,5 +179,6 @@ public class LocationAlarm extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+    */
 }
 

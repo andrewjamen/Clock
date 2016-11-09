@@ -335,6 +335,11 @@ public class SetAlarm extends AppCompatActivity {
                 pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
+
+
+                Intent main = new Intent(SetAlarm.this, MainActivity.class);
+                startActivity(main);
+
             }
 
 

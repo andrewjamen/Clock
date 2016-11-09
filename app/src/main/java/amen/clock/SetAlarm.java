@@ -264,6 +264,7 @@ public class SetAlarm extends AppCompatActivity {
                 }
 
 
+
                 // Get the location manager
                 locationMgr = (LocationManager)
                         getSystemService(Context.LOCATION_SERVICE);
@@ -327,6 +328,10 @@ public class SetAlarm extends AppCompatActivity {
                 criteria.setCostAllowed(false);
                  */
 
+
+                //TODO: if (repeaing)
+                // setInexactRepeating(int type, long triggerTime, long interval, PendingInent);
+                //INTERVAL_DAY for triggerTime
 
 
                 Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location);

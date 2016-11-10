@@ -32,6 +32,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        double latitude = 40.508625 ;
+        double longitude =-88.989027;
+
         String msg = intent.getExtras().getString("message");
 
         notification = new  NotificationCompat.Builder(context);
@@ -39,8 +42,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         notification.setSmallIcon(R.drawable.clock);
         notification.setTicker("Test");
         //notification.setWhen(System.currentTimeMillis());
-        notification.setContentTitle("Alarm Clock!");
-        notification.setContentText(msg);
+        notification.setContentTitle(msg);
+        notification.setContentText("319 West North Street");
         notification.setDefaults(Notification.DEFAULT_ALL);
         notification.setPriority(PRIORITY_HIGH);
 
@@ -53,6 +56,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Vibrate
         //Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         //vibrator.vibrate(2000);
+
+
 
     }
 }

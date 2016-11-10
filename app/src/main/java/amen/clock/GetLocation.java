@@ -77,7 +77,7 @@ public class GetLocation extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
+                != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
             } else {
@@ -86,7 +86,7 @@ public class GetLocation extends AppCompatActivity {
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         11);
             }
-        }else {
+        } else {
             Toast.makeText(this, "" + Manifest.permission.ACCESS_FINE_LOCATION + " is already granted.", Toast.LENGTH_SHORT).show();
         }
         criteria.setCostAllowed(false);
@@ -178,3 +178,4 @@ public class GetLocation extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+}

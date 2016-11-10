@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -20,7 +21,7 @@ public class LocationAlarm extends AppCompatActivity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_location_alarm);
 
 
         final Spinner timer = (Spinner) findViewById(R.id.spinner1);
@@ -29,9 +30,10 @@ public class LocationAlarm extends AppCompatActivity{
         {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {
-                Spinner t = (Spinner) findViewById(R.id.spinner1);
-                Toast.makeText(parent.getContext(), "Inactivity timer set to " +parent.getItemAtPosition(pos) ,Toast.LENGTH_SHORT).show();
-                alarm(parent.getSelectedItemPosition());
+                int selected = parent.getSelectedItemPosition() + 1;
+                Toast.makeText(parent.getContext(), "Inactivity timer set to " +selected +" minutes." ,Toast.LENGTH_SHORT).show();
+                selected = selected * 60;
+                alarm(selected);
             }
             public void onNothingSelected(AdapterView<?> parent)
             {
@@ -39,30 +41,44 @@ public class LocationAlarm extends AppCompatActivity{
             }
         });
 
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.inactivity_Timer, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timer.setAdapter(adapter);
 
-        int defaultTime = adapter.getPosition("2 Minutes");
-        timer.setSelection(defaultTime);
+        ArrayList<String> arrayL = new ArrayList<>();
+
+        arrayL.add("1");
+        arrayL.add("2");
+        arrayL.add("3");
+        arrayL.add("4");
+        arrayL.add("5");
+        arrayL.add("6");
+        arrayL.add("7");
+        arrayL.add("8");
+        arrayL.add("9");
+        arrayL.add("10");
+
+        for (int i = 0; i < arrayL.size(); i++) {
+            adapter.add(arrayL.get(i));
+        }
+
+        timer.setAdapter(adapter);
+        timer.setSelection(0);
     }
 
     private void alarm(int timer){
         AlarmManager alm;
         Intent in;
         PendingIntent alarmIntent;
-        Spinner t;
 
         alm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        in = new Intent(LocationAlarm.this, AlarmReceiver.class);
-        t = (Spinner) findViewById(R.id.spinner1);
+        in = new Intent(LocationAlarm.this, LocationReceiver.class);
         alarmIntent = PendingIntent.getActivity(this, 000001, in, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, 15);//set 15 to the timer add a method that changes timer to the correct time in seconds.
+        cal.add(Calendar.SECOND, 5);//set to 5 to test
 
-        alm = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+        //alm = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
         alm.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), alarmIntent);
     }
 }

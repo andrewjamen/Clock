@@ -29,8 +29,10 @@ public class LocationAlarm extends Activity{
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {
                 //Spinner t = (Spinner) findViewById(R.id.spinner1);
-                Toast.makeText(parent.getContext(), "Inactivity timer set to " +parent.getItemAtPosition(pos) ,Toast.LENGTH_SHORT).show();
-                alarm(parent.getSelectedItemPosition());
+                int selection = (int) parent.getSelectedItemPosition() + 1;
+                selection = selection * 60;
+                Toast.makeText(parent.getContext(), "Inactivity timer set to " +selection +" seconds." ,Toast.LENGTH_SHORT).show();
+                alarm(selection);
             }
             public void onNothingSelected(AdapterView<?> parent)
             {
@@ -45,8 +47,20 @@ public class LocationAlarm extends Activity{
         //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.inactivity_Timer, android.R.layout.simple_spinner_item);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        adapter.add("One Minute");
-        adapter.add("Two Minutes");
+        adapter.add("1");
+        adapter.add("2");
+        adapter.add("3");
+        adapter.add("4");
+        adapter.add("5");
+        adapter.add("6");
+        adapter.add("7");
+        adapter.add("8");
+        adapter.add("9");
+        adapter.add("10");
+        adapter.add("20");
+        adapter.add("30");
+        adapter.add("60");
+
         timer.setAdapter(adapter);
 
         int defaultTime = adapter.getPosition("2 Minutes");
@@ -65,7 +79,7 @@ public class LocationAlarm extends Activity{
         alarmIntent = PendingIntent.getActivity(this, 000001, in, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, 15);//set 15 to the timer add a method that changes timer to the correct time in seconds.
+        cal.add(Calendar.SECOND, timer);
 
         alm = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
         alm.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), alarmIntent);

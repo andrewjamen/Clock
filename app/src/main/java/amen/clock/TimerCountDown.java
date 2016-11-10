@@ -5,6 +5,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,23 +34,21 @@ public class TimerCountDown extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer_count_down);
 
+        //Gets the intent and intent put extra from previous activity. (Basically gets data)
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        long hour = extras.getInt("Hour");
+        final long hour = extras.getInt("Hour");
         long min = extras.getInt("Minute");
         long sec = extras.getInt("Seconds");
         final String userMessage = extras.getString("userMsg");
-
-        rightNow = Calendar.getInstance();
-
-        long totalTime = ( (sec*1000) + hour*3600000 + min*60000);
-
-        rightNow.set(Calendar.HOUR, (int)hour);
-        rightNow.set(Calendar.MINUTE, (int)min);
-        rightNow.set(Calendar.SECOND, (int)sec);
+        final double latitude = extras.getDouble("latitude");
+        final double longitude = extras.getDouble("longitude");
 
 
+        long totalTime = ( (sec*1000) + hour*3600000 + min*60000);//converts time into milliseconds.
 
+
+        //Testing milliseconds
         Log.i("Time " + totalTime, "milliseconds");
 
         //notification
@@ -57,7 +60,7 @@ public class TimerCountDown extends AppCompatActivity {
         new CountDownTimer(totalTime, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                time.setText("Time remaining: " + millisUntilFinished / 1000);
+                time.setText("Time remaining: " + millisUntilFinished/1000 + " Seconds");
             }
 
             public void onFinish() {
@@ -68,7 +71,7 @@ public class TimerCountDown extends AppCompatActivity {
         notification.setTicker("This is the ticker");
         notification.setWhen(System.currentTimeMillis());
         notification.setContentTitle(userMessage);
-        notification.setContentText("Click here to go to app.");
+        notification.setContentText("Location: "+getCompleteAddressString(latitude,longitude));
         notification.setDefaults(Notification.DEFAULT_ALL);
         notification.setPriority(PRIORITY_HIGH);
 
@@ -84,6 +87,34 @@ public class TimerCountDown extends AppCompatActivity {
         }.start();
 
 
+    }
+
+
+    /*
+    Gets address in shipping address form.
+     */
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("Current loc of address", "" + strReturnedAddress.toString());
+            } else {
+                Log.w("Current loc of address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("Current loc address", "Cannot get Address!");
+        }
+        return strAdd;
     }
 
 

@@ -63,6 +63,7 @@ public class SetAlarm extends Activity {
         setContentView(R.layout.activity_set_alarm);
 
 
+
         setAlarmB = (Button) findViewById(R.id.setAlarmButton);
 
         //Set spinners and stuff
@@ -388,6 +389,8 @@ public class SetAlarm extends Activity {
 
         location = locationMgr.getLastKnownLocation(provider);
     }
+
+
 
 
 }

@@ -10,13 +10,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import android.os.CountDownTimer;
+
+import org.w3c.dom.Text;
 
 
 public class LocationAlarm extends AppCompatActivity{
+
+
+    Intent intent;
+    AlarmManager alarmMgr;
+    PendingIntent pendingIntent;
+    int i = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,14 +35,35 @@ public class LocationAlarm extends AppCompatActivity{
 
         final Spinner timer = (Spinner) findViewById(R.id.spinner1);
 
+        final TextView countDown = (TextView) findViewById(R.id.countDown);
+
         timer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
+
+
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
             {
-                int selected = parent.getSelectedItemPosition() + 1;
-                Toast.makeText(parent.getContext(), "Inactivity timer set to " +selected +" minutes." ,Toast.LENGTH_SHORT).show();
+
+                int selected = parent.getSelectedItemPosition();
+
+                if (selected == 0){
+                    return;
+                }
+
+                Toast.makeText(parent.getContext(), "Inactivity timer set to " +selected +" minutes." ,Toast.LENGTH_LONG).show();
                 selected = selected * 60;
                 alarm(selected);
+                CountDownTimer ctr = new CountDownTimer(selected * 1000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        countDown.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    }
+
+                    public void onFinish() {
+                        countDown.setText("done!");
+                    }
+                }.start();
+
             }
             public void onNothingSelected(AdapterView<?> parent)
             {
@@ -46,37 +77,35 @@ public class LocationAlarm extends AppCompatActivity{
 
         ArrayList<String> arrayL = new ArrayList<>();
 
-        arrayL.add("1");
-        arrayL.add("2");
-        arrayL.add("3");
-        arrayL.add("4");
-        arrayL.add("5");
-        arrayL.add("6");
-        arrayL.add("7");
-        arrayL.add("8");
-        arrayL.add("9");
-        arrayL.add("10");
+        arrayL.add("");
+        arrayL.add("1 minute");
+        arrayL.add("2 minutes");
+        arrayL.add("3 minutes");
+        arrayL.add("4 minutes");
+        arrayL.add("5 minutes");
+        arrayL.add("6 minutes");
+        arrayL.add("7 minutes");
+        arrayL.add("8 minutes");
+        arrayL.add("9 minutes");
+        arrayL.add("10 minutes");
 
         for (int i = 0; i < arrayL.size(); i++) {
             adapter.add(arrayL.get(i));
         }
 
         timer.setAdapter(adapter);
-        timer.setSelection(0);
+
     }
 
-    private void alarm(int timer){
-        AlarmManager alm;
-        Intent in;
-        PendingIntent alarmIntent;
-
-        alm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        in = new Intent(LocationAlarm.this, LocationReceiver.class);
-        alarmIntent = PendingIntent.getActivity(LocationAlarm.this, 000001, in, PendingIntent.FLAG_CANCEL_CURRENT);
+    private void alarm(int userTimer){
+        alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        intent = new Intent(this, LocationReceiver.class);
+        pendingIntent = PendingIntent.getActivity(this, 000001, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, 5);//set to 5 to test
+        cal.add(Calendar.SECOND, userTimer);//set to 5 to test
 
-        alm.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), alarmIntent);
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+
     }
 }

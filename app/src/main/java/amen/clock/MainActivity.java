@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setAlarms = (Button) findViewById(R.id.setAlarms);
         setTimer = (Button) findViewById(R.id.setTimer);
         locationAlarm = (Button) findViewById(R.id.locationAlarm);
-        alarmList = (Button) findViewById(R.id.viewAlarms);
+
 
 
         setAlarms.setOnClickListener(new View.OnClickListener() {
@@ -47,15 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        alarmList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(MainActivity.this, AlarmList.class);
-                startActivity(intent);
-            }
-        });
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -27,7 +27,8 @@ public class LocationReceiver extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.alarm);
+        setContentView(R.layout.activity_location_receiver);
+
 
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -48,6 +49,9 @@ public class LocationReceiver extends Activity {
         }
 
         Button stopAlarm = (Button) findViewById(R.id.stopAlarm);
+
+        //TODO: remove button add location
+
         stopAlarm.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 mMediaPlayer.stop();

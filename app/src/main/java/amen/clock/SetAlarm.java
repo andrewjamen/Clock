@@ -15,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -51,6 +50,7 @@ public class SetAlarm extends Activity {
     private String provider;
     private Intent intent;
     private PendingIntent pendingIntent;
+    public Button setAlarmB;
 
     NotificationCompat.Builder notification;
     private static final int uniqueID = 112211;
@@ -62,23 +62,21 @@ public class SetAlarm extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_alarm);
 
+        setAlarmB = (Button) findViewById(R.id.setAlarmButton);
+
         //On click listener to button
-    /*    setAlarm.setOnClickListener(new View.OnClickListener() {
+        setAlarmB.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+                setAlarm(v);
 
 
             }
 
 
-        });*/
-
-
-
-
-
+        });
     }
 
     public void setAlarm(View view)
@@ -89,7 +87,6 @@ public class SetAlarm extends Activity {
         datePicker = (DatePicker) findViewById(R.id.datePicker);
         alarmMessage = (EditText) findViewById(R.id.alarmMessage);
         timeZoneSpinner = (Spinner) findViewById(R.id.timeZoneSpinner);
-        Button setAlarm = (Button) findViewById(R.id.setAlarmButton);
         sunday = (CheckBox) findViewById(R.id.sundayCheckBox);
         monday = (CheckBox) findViewById(R.id.mondayCheckBox);
         tuesday = (CheckBox) findViewById(R.id.tuesdayCheckBox);
@@ -335,33 +332,16 @@ public class SetAlarm extends Activity {
         //Auto generated permission check end
         location = locationMgr.getLastKnownLocation(provider);
 
-        //Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location); Not used, needed for array but still
-
-            /*    notification.setSmallIcon(R.drawable.clock);
-                notification.setTicker(alarmMessageText);
-                notification.setWhen(System.currentTimeMillis());
-                notification.setContentTitle("Alarm Clock!");
-                notification.setContentText(alarmMessageText);
-                notification.setDefaults(Notification.DEFAULT_ALL);
-                notification.setPriority(PRIORITY_HIGH);
-
-
-                Intent intent2 = new Intent(SetAlarm.this, MainActivity.class);
-                PendingIntent pendingIntent2 = PendingIntent.getActivity(SetAlarm.this, 0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
-                notification.setContentIntent(pendingIntent2);
-
-                NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                nm.notify(uniqueID, notification.build());  */
-
         Log.i("Message:" +alarmMessageText, "");
         Log.i("Time: " +String.valueOf(alarmTime), "");
+        Toast.makeText(getApplicationContext(), "Alarm Set Bitch", Toast.LENGTH_LONG).show();
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         intent = new Intent(SetAlarm.this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
 
-        Toast.makeText(getApplicationContext(), "Alarm Set Bitch", Toast.LENGTH_LONG).show();
+
         Intent main = new Intent(SetAlarm.this, MainActivity.class);
         startActivity(main);
     }

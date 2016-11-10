@@ -146,6 +146,7 @@ public class SetAlarm extends Activity {
                 //get timezone selection (not exactly sure how this output will look, haven't tested)
                 timeZoneSelection = timeZoneSpinner.getSelectedItemPosition();
 
+                Log.e("Timezone selection: " +timeZoneSelection,"");
                 if(timeZoneSelection != 5)
                     alarmTime = timeZone(timeZoneSelection, alarmTime);
 
@@ -231,13 +232,20 @@ public class SetAlarm extends Activity {
                 boolean[] rptDays = {sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB};
 
                 String toastMsg;
-
+                String ampm = "am";
+                if(hour > 12) {
+                    hour = hour - 12;
+                    ampm = "pm";
+                }
+                String stringMinute = String.valueOf(minute);
+                if(minute < 10)
+                    stringMinute = "0" +minute;
                 if(repeated)
                 {
-                    toastMsg = "Alarm set for " +(month+1) + "/" + dayOfYr + "/" + year + "\n Repeated every " +repeatedString;
+                    toastMsg = "Alarm set for " +hour +":" +stringMinute +ampm +"\n" +(month+1) + "/" + dayOfYr + "/" + year + "\n Repeated every " +repeatedString;
                 }
                 else
-                    toastMsg = "Alarm set for " +(month+1) +"/" +dayOfYr +"/" +year;
+                    toastMsg = "Alarm set for " +hour +":" +stringMinute +ampm +"\n" +(month+1) +"/" +dayOfYr +"/" +year;
 
                 Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_LONG).show();
 
@@ -258,73 +266,73 @@ public class SetAlarm extends Activity {
 
             switch (selection) {
                 case 0:
-                    hrDif = -5 * convert;
-                    break;
-                case 1:
-                    hrDif = -4 * convert;
-                    break;
-                case 2:
-                    hrDif = -3 * convert;
-                    break;
-                case 3:
-                    hrDif = -2 * convert;
-                    break;
-                case 4:
-                    hrDif = -1 * convert;
-                    break;
-                case 6:
-                    hrDif = 1 * convert;
-                    break;
-                case 7:
-                    hrDif = 2 * convert;
-                    break;
-                case 8:
-                    hrDif = 3 * convert;
-                    break;
-                case 9:
-                    hrDif = 4 * convert;
-                    break;
-                case 10:
                     hrDif = 5 * convert;
                     break;
+                case 1:
+                    hrDif = 4 * convert;
+                    break;
+                case 2:
+                    hrDif = 3 * convert;
+                    break;
+                case 3:
+                    hrDif = 2 * convert;
+                    break;
+                case 4:
+                    hrDif = 1 * convert;
+                    break;
+                case 6:
+                    hrDif = -1 * convert;
+                    break;
+                case 7:
+                    hrDif = -2 * convert;
+                    break;
+                case 8:
+                    hrDif = -3 * convert;
+                    break;
+                case 9:
+                    hrDif = -4 * convert;
+                    break;
+                case 10:
+                    hrDif = -5 * convert;
+                    break;
                 case 11:
-                    hrDif = 6 * convert;
+                    hrDif = -6 * convert;
                     break;
                 case 12:
-                    hrDif = 7 * convert;
+                    hrDif = -7 * convert;
                     break;
                 case 13:
-                    hrDif = 8 * convert;
+                    hrDif = -8 * convert;
                     break;
                 case 14:
-                    hrDif = 9 * convert;
+                    hrDif = -9 * convert;
                     break;
                 case 15:
-                    hrDif = 10 * convert;
+                    hrDif = -10 * convert;
                     break;
                 case 16:
-                    hrDif = 11 * convert;
+                    hrDif = -11 * convert;
                     break;
                 case 17:
-                    hrDif = 12 * convert;
+                    hrDif = -12 * convert;
                     break;
                 case 18:
-                    hrDif = 13 * convert;
+                    hrDif = -13 * convert;
                     break;
                 case 19:
-                    hrDif = 14 * convert;
+                    hrDif = -14 * convert;
                     break;
                 case 20:
-                    hrDif = 15 * convert;
+                    hrDif = -15 * convert;
                     break;
                 case 21:
-                    hrDif = 16 * convert;
+                    hrDif = -16 * convert;
                     break;
                 case 22:
-                    hrDif = 17 * convert;
+                    hrDif = -17 * convert;
                     break;
                 case 23:
-                    hrDif = 18 * convert;
+                    hrDif = -18 * convert;
                     break;
                 default:
                     break;

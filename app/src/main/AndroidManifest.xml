@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="amen.clock">
 
+    <permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <permission android:name="android.permission.ACCESS_COURSE_LOCATION"/>
     <!-- permission required to use Alarm Manager -->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -20,11 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlarmList" />
         <activity android:name=".SetAlarm" />
-        <activity android:name=".SetTimer" />
         <activity android:name=".LocationAlarm" />
         <receiver android:name=".AlarmReceiver"/>
+        <activity android:name=".LocationReceiver"/>
+        <activity android:name=".Timer"/>
+        <activity android:name=".CountDown"/>
 
     </application>
 

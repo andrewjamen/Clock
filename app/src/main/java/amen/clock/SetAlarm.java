@@ -71,6 +71,7 @@ public class SetAlarm extends Activity {
         setContentView(R.layout.activity_set_alarm);
 
 
+
         setAlarmB = (Button) findViewById(R.id.setAlarmButton);
 
         //On click listener to button
@@ -446,6 +447,8 @@ public class SetAlarm extends Activity {
 
         location = locationMgr.getLastKnownLocation(provider);
     }
+
+
 
 
 }

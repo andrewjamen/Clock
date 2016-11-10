@@ -40,12 +40,12 @@ public class LocationAlarm extends AppCompatActivity{
         });
 
 
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.inactivity_Timer, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        timer.setAdapter(adapter);
-//
-//        int defaultTime = adapter.getPosition("2 Minutes");
-        //timer.setSelection(defaultTime);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.inactivity_Timer, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timer.setAdapter(adapter);
+
+        int defaultTime = adapter.getPosition("2 Minutes");
+        timer.setSelection(defaultTime);
     }
 
     private void alarm(int timer){

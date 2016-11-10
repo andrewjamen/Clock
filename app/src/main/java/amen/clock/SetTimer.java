@@ -84,6 +84,25 @@ public class SetTimer extends Activity implements OnClickListener {
         @Override
         public void onFinish()
         {
+            notification.setSmallIcon(R.drawable.clock);
+            notification.setTicker("This is the ticker");
+            notification.setWhen(System.currentTimeMillis());
+            notification.setContentTitle("Timer is up!!!");
+            notification.setContentText("Click here to go to app.");
+            notification.setDefaults(Notification.DEFAULT_ALL);
+            notification.setPriority(PRIORITY_HIGH);
+
+
+            Intent intent2 = new Intent(SetTimer.this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(SetTimer.this, 0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
+            notification.setContentIntent(pendingIntent);
+
+            //Builds notification and issues it to the device
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nm.notify(uniqueID, notification.build());
+
+
+
             text.setText("Time's up!");
             timeElapsedView.setText("Time Elapsed: " +
                     String.valueOf(startTime/1000 + " seconds"));

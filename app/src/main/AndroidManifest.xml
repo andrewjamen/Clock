@@ -21,7 +21,9 @@
         <activity android:name=".AlarmList" />
         <activity android:name=".SetAlarm" />
         <activity android:name=".LocationAlarm" />
-        <activity android:name=".SetTimer"></activity>
+        <receiver android:name=".AlarmReceiver"
+                    android:enabled="true"/>
+
     </application>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 </manifest>

@@ -1,150 +1,148 @@
 package amen.clock;
 
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.EditText;
+import android.Manifest;
 import android.widget.TextView;
 
-import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
 
 
-public class SetTimer extends Activity implements OnClickListener {
+public class SetTimer extends Activity implements LocationListener {
 
-    private countDown countDownTimer;
-    private long timeElapsed;
-    private boolean timerHasStarted = false;
-    private Button startB;
-    private TextView text;
-    private TextView timeElapsedView;
+    LocationManager locationManager;
+    Location location;
+    String mprovider;
+    double latitude;
+    double longitude;
 
-    //Start notification
-    NotificationCompat.Builder notification;
-    private static final int uniqueID = 45612;
-    //End Notification
+    EditText hoursET;
+    EditText minutesET;
+    EditText secondsET;
+    EditText notificationMsgET;
 
-    private final long startTime = 15 * 1000;
-    private final long interval = 1 * 1000;
+    String hours;
+    String minutes;
+    String seconds;
+
+    int hoursInt = 0;
+    int minutesInt = 0;
+    int secondsInt = 0;
+    String userMessage = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_timer);
+    }
 
-        startB = (Button) this.findViewById(R.id.button);
-        startB.setOnClickListener(this);
-        text = (TextView) this.findViewById(R.id.timer);
-        timeElapsedView = (TextView) this.findViewById(R.id.timeElapsed);
-        countDownTimer = new countDown(startTime, interval);
-        text.setText(text.getText() + String.valueOf(startTime));
+    public void btnClicked(View view){
 
-        //notification
-        notification = new  NotificationCompat.Builder(this);
-        notification.setAutoCancel(true);
+        //Location
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        mprovider = locationManager.getBestProvider(criteria, false);
+
+        if (mprovider != null && !mprovider.equals("")) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+             location = locationManager.getLastKnownLocation(mprovider);
+
+            locationManager.requestLocationUpdates(mprovider, 15000, 1, this);
+
+        }
+
+        //Testing the GPS Location
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        Log.i("Latitude: "+ latitude, "degrees");
+
+        locationManager.removeUpdates(this); //Stops searching for location
+
+
+        //creating EditText objects
+        hoursET = (EditText) findViewById(R.id.hours);
+        minutesET = (EditText) findViewById(R.id.minutes);
+        secondsET = (EditText) findViewById(R.id.seconds);
+        notificationMsgET = (EditText) findViewById(R.id.notificationMsg);
+
+        //converting EditText to a string
+        hours = hoursET.getText().toString();
+        minutes = minutesET.getText().toString();
+        seconds = secondsET.getText().toString();
+
+        //Converting Hours, mins and secs to integers.
+        userMessage = notificationMsgET.getText().toString();
+        hoursInt = Integer.parseInt(hours);
+        minutesInt = Integer.parseInt(minutes);
+        secondsInt = Integer.parseInt(seconds);
+
+        //Testing user input.
+        Log.i("Hours: " + hoursInt, "hours" );
+        Log.i("Minutes: " + minutesInt, "minutes");
+        Log.i("Seconds: " + seconds, "seconds");
+        Log.i("Message: ", userMessage);
+
+
+        //Saving data to send to another activity.
+        Intent countDownTimerActivity = new Intent(this, TimerCountDown.class);
+        Bundle extras = new Bundle();
+        extras.putDouble("latitude", latitude);
+        extras.putDouble("longitude", longitude);
+        extras.putInt("Hour", hoursInt);
+        extras.putInt("Minute", minutesInt);
+        extras.putInt("Seconds", secondsInt);
+        extras.putString("userMsg", userMessage);
+        countDownTimerActivity.putExtras(extras);
+        startActivity(countDownTimerActivity);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    //Implements LocationListener methods::: IGNORE ::::
+
+    @Override
+    public void onLocationChanged(Location location) {
 
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (!timerHasStarted)
-        {
-            countDownTimer.start();
-            timerHasStarted = true;
-            startB.setText("Start");
-        }
-        else
-        {
-            countDownTimer.cancel();
-            timerHasStarted = false;
-            startB.setText("RESET");
-        }
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
     }
 
+    @Override
+    public void onProviderEnabled(String provider) {
 
-    // CountDownTimer class
-    public class countDown extends CountDownTimer
-    {
-        public countDown(long startTime, long interval)
-        {
-            super(startTime, interval);
-        }
-        @Override
-        public void onFinish()
-        {
-            notification.setSmallIcon(R.drawable.clock);
-            notification.setTicker("This is the ticker");
-            notification.setWhen(System.currentTimeMillis());
-            notification.setContentTitle("Timer is up!!!");
-            notification.setContentText("Click here to go to app.");
-            notification.setDefaults(Notification.DEFAULT_ALL);
-            notification.setPriority(PRIORITY_HIGH);
-
-
-            Intent intent2 = new Intent(SetTimer.this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(SetTimer.this, 0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
-            notification.setContentIntent(pendingIntent);
-
-            //Builds notification and issues it to the device
-            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.notify(uniqueID, notification.build());
-
-
-
-            text.setText("Time's up!");
-            timeElapsedView.setText("Time Elapsed: " +
-                    String.valueOf(startTime/1000 + " seconds"));
-        }
-        @Override
-        public void onTick(long millisUntilFinished)
-        {
-            text.setText("Time remain:" + millisUntilFinished/1000 + " seconds");
-            timeElapsed = startTime - millisUntilFinished;
-            timeElapsedView.setText("Time Elapsed: " +
-                    String.valueOf(timeElapsed/1000 + " seconds"));
-        }
     }
 
+    @Override
+    public void onProviderDisabled(String provider) {
 
-    /*
-    This Method is the notification.
-     */
-    public void finish(View view){
-        //Build the notification
-        notification.setSmallIcon(R.drawable.clock);
-        notification.setTicker("This is the ticker");
-        notification.setWhen(System.currentTimeMillis());
-        notification.setContentTitle("Timer is up!!!");
-        notification.setContentText("Click here to go to app.");
-        notification.setDefaults(Notification.DEFAULT_ALL);
-        notification.setPriority(PRIORITY_HIGH);
-
-
-        Intent intent2 = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,intent2,PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setContentIntent(pendingIntent);
-
-        //Builds notification and issues it to the device
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify(uniqueID, notification.build());
-
-
-        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, (long) alarmTime, pendingIntent);
     }
-
-
 }
 
 

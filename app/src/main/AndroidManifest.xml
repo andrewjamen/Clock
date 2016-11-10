@@ -3,7 +3,13 @@
     package="amen.clock">
 
     <!-- permission required to use Alarm Manager -->
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <grant-uri-permission android:path="string"
+        android:pathPattern="string"
+        android:pathPrefix="string" />
 
     <application
         android:allowBackup="true"
@@ -21,8 +27,10 @@
         <activity android:name=".AlarmList" />
         <activity android:name=".SetAlarm" />
         <activity android:name=".LocationAlarm" />
-        <receiver android:name=".AlarmReceiver"/>
 
+        <receiver android:name=".AlarmReceiver" />
+
+        <activity android:name=".LocationReceiver"></activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
 </manifest>

@@ -156,7 +156,7 @@ public class GetLocation extends AppCompatActivity {
             //latitude.setText("Latitude: " + String.valueOf(location.getLatitude()));
             //longitude.setText("Longitude: " + String.valueOf(location.getLongitude()));
             latitudeD = location.getLatitude();
-            longitudeD = location.getLongitude()
+            longitudeD = location.getLongitude();
             //provText.setText(provider + " provider has been selected.");
 
             Toast.makeText(GetLocation.this, "Location changed!",

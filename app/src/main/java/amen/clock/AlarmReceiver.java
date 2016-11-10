@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.app.PendingIntent;
 import android.support.v7.app.NotificationCompat;
+import android.widget.Toast;
 //import android.widget.Toast;
 //import android.os.Vibrator;
 
@@ -28,6 +29,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
+
+        Toast.makeText(context, "BITCHHHHH", Toast.LENGTH_LONG).show();
 
         notification = new  NotificationCompat.Builder(context);
         notification.setAutoCancel(true);

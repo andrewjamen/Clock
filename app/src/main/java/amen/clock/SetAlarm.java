@@ -63,7 +63,6 @@ public class SetAlarm extends Activity {
     private static final int uniqueID = 112211;
 
 
-
     //On Create method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +250,6 @@ public class SetAlarm extends Activity {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(uniqueID, notification.build());
     }
-
 
     public double timeZone(int selection, double alarmTime){
 

@@ -34,8 +34,8 @@ public class CountDown extends AppCompatActivity implements LocationListener {
 //    LocationManager locationManager;
 //    Location location;
 //    String mprovider;
-//    double latitude;
-//    double longitude;
+    double latitude;
+    double longitude;
     //LOCATION
 
 
@@ -89,6 +89,8 @@ public class CountDown extends AppCompatActivity implements LocationListener {
         //Location
 
 
+        latitude = 40.508625 ;
+        longitude =-88.989027;
 
 
 
@@ -143,8 +145,8 @@ public class CountDown extends AppCompatActivity implements LocationListener {
                 notification.setSmallIcon(R.drawable.clock);
                 notification.setTicker("This is a ticker");
                 notification.setWhen(System.currentTimeMillis());
-                notification.setContentTitle("Timers Up!");
-                notification.setContentText(message);
+                notification.setContentTitle(message);
+                notification.setContentText(getCompleteAddressString(latitude,longitude));
                 notification.setDefaults(Notification.DEFAULT_ALL);
                 notification.setPriority(PRIORITY_HIGH);
 

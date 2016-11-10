@@ -170,45 +170,76 @@ public class SetAlarm extends Activity {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, (long)alarmTime, pendingIntent);
 
                 //get repeat days
-                if (sunday.isChecked())
+                boolean repeated = false;
+                String repeatedString = "";
+                if (sunday.isChecked()) {
                     sundayCB = true;
+                    repeatedString += "Sunday. ";
+                    repeated = true;
+                }
                 else
                     sundayCB = false;
 
-                if (monday.isChecked())
+                if (monday.isChecked()) {
                     mondayCB = true;
+                    repeatedString += "Monday. ";
+                    repeated = true;
+                }
                 else
                     mondayCB = false;
 
-                if (tuesday.isChecked())
+                if (tuesday.isChecked()) {
                     tuesdayCB = true;
+                    repeatedString += "Tuesday. ";
+                    repeated = true;
+                }
                 else
                     tuesdayCB = false;
 
-                if (wednesday.isChecked())
+                if (wednesday.isChecked()) {
                     wednesdayCB = true;
+                    repeatedString += "Wednesday. ";
+                    repeated = true;
+                }
                 else
                     wednesdayCB = false;
 
-                if (thursday.isChecked())
+                if (thursday.isChecked()) {
                     thursdayCB = true;
+                    repeatedString += "Thursday. ";
+                    repeated = true;
+                }
                 else
                     thursdayCB = false;
 
-                if (friday.isChecked())
+                if (friday.isChecked()) {
                     fridayCB = true;
+                    repeatedString += "Friday. ";
+                    repeated = true;
+                }
                 else
                     fridayCB = false;
 
-                if (saturday.isChecked())
+                if (saturday.isChecked()) {
                     saturdayCB = true;
+                    repeatedString += "Saturday.";
+                    repeated = true;
+                }
                 else
                     saturdayCB = false;
 
-                //Save repeats days into boolean array, sunday - saturday
                 boolean[] rptDays = {sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB};
 
-                Toast.makeText(getApplicationContext(), "Alarm Set", Toast.LENGTH_LONG).show();
+                String toastMsg;
+
+                if(repeated)
+                {
+                    toastMsg = "Alarm set for " +(month+1) + "/" + dayOfYr + "/" + year + "\n Repeated every " +repeatedString;
+                }
+                else
+                    toastMsg = "Alarm set for " +(month+1) +"/" +dayOfYr +"/" +year;
+
+                Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_LONG).show();
 
                 Intent main = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(main);
@@ -300,6 +331,7 @@ public class SetAlarm extends Activity {
             }
 
         timely = timely + hrDif;
+        Log.e("" +String.valueOf(timely),"");
         return timely;
     }
 

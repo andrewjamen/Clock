@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
 
-//      https://www.youtube.com/playlist?list=PL4uut9QecF3DLAacEoTctzeqTyvgzqYwA
-//     onCreate() vs onStart() vs onResume()
+// TODO:    onCreate() vs onStart() vs onResume()
 public class MainActivity extends AppCompatActivity {
 
     public Button setAlarms;

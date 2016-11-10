@@ -10,7 +10,7 @@ import android.content.Intent;
 public class MainActivity extends AppCompatActivity {
 
     public Button setAlarms;
-    public Button setTimer;
+    public Button timer;
     public Button locationAlarm;
     public Button alarmList;
 
@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         setAlarms = (Button) findViewById(R.id.setAlarms);
-        setTimer = (Button) findViewById(R.id.setTimer);
+        timer = (Button) findViewById(R.id.setTimer);
         locationAlarm = (Button) findViewById(R.id.locationAlarm);
 
 
@@ -31,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        setTimer.setOnClickListener(new View.OnClickListener() {
+        timer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, SetTimer.class);
+                Intent intent = new Intent(MainActivity.this, Timer.class);
                 startActivity(intent);
             }
         });

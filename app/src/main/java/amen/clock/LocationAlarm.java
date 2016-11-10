@@ -40,12 +40,12 @@ public class LocationAlarm extends AppCompatActivity{
         });
 
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.inactivity_Timer, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timer.setAdapter(adapter);
-
-        int defaultTime = adapter.getPosition("2 Minutes");
-        timer.setSelection(defaultTime);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.inactivity_Timer, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        timer.setAdapter(adapter);
+//
+//        int defaultTime = adapter.getPosition("2 Minutes");
+//        timer.setSelection(defaultTime);
     }
 
     private void alarm(int timer){
@@ -55,7 +55,7 @@ public class LocationAlarm extends AppCompatActivity{
         Spinner t;
 
         alm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        in = new Intent(LocationAlarm.this, AlarmReceiver.class);
+        in = new Intent(LocationAlarm.this, AlarmManager.class);
         t = (Spinner) findViewById(R.id.spinner1);
         alarmIntent = PendingIntent.getActivity(this, 000001, in, PendingIntent.FLAG_CANCEL_CURRENT);
 

@@ -1,16 +1,25 @@
 package amen.clock;
+//https://developer.android.com/training/scheduling/alarms.html
+
+/**
+ * Created by Andrew on 11/9/2016.
+ */
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.location.Location;
+import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -25,6 +34,8 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.location.Criteria;
 import android.widget.Toast;
+
+import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
 
 
 public class SetAlarm extends Activity {
@@ -46,9 +57,11 @@ public class SetAlarm extends Activity {
     private Intent intent;
     private PendingIntent pendingIntent;
     public Button setAlarmB;
+    private double alarmTime;
 
     NotificationCompat.Builder notification;
     private static final int uniqueID = 112211;
+
 
 
     //On Create method
@@ -57,15 +70,22 @@ public class SetAlarm extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_alarm);
 
+
         setAlarmB = (Button) findViewById(R.id.setAlarmButton);
 
-      /*  setAlarmB.setOnClickListener(new View.OnClickListener() {
+        //On click listener to button
+        setAlarmB.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
+                Log.i("onClick called", "sdf");
+
                 setAlarm(v);
 
+                Toast.makeText(getApplicationContext(), "Alarm Set", Toast.LENGTH_LONG).show();
+
+                sendNotificatioin();
 
                 Intent main = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(main);
@@ -74,11 +94,15 @@ public class SetAlarm extends Activity {
             }
 
 
-        }); */
+        });
     }
+
+
 
     public void setAlarm(View view)
     {
+        Log.i("setAlarm called", "sdf");
+
 
         //Set spinners and stuff
         timePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -93,65 +117,32 @@ public class SetAlarm extends Activity {
         friday = (CheckBox) findViewById(R.id.fridayCheckBox);
         saturday = (CheckBox) findViewById(R.id.saturdayCheckBox);
 
-        notification = new  NotificationCompat.Builder(this);
-        notification.setAutoCancel(true);
-
-        //This fills the timezone spinner with all the timezones
-        ArrayAdapter<CharSequence> adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        ArrayList<String> TZ = new ArrayList<>();
-
-
-        TZ.add("Nieu Time");    //GMT-11
-        TZ.add("Hawaiian Standard Time"); //GMT-10
-        TZ.add("Alaskan Standard Time");
-        TZ.add("Pacific Standard Time");
-        TZ.add("Mountain Standard Time");
-        TZ.add("Central Standard Time"); //GMT-6
-        TZ.add("Eastern Standard Time");
-        TZ.add("Atlantic Standard Time"); //GMT-4
-        TZ.add("West Greenland Time");  //GMT-3
-        TZ.add("South Georgia Time");
-        TZ.add("East Greenland Time");
-        TZ.add("Greenwich Mean Time"); //GMT
-        TZ.add("Central European Time");    //GMT+01
-        TZ.add("Eastern European Time");
-        TZ.add("Moscow Standard Time");
-        TZ.add("Gulf Standard Time");   //GMT+4
-        TZ.add("Yekaterinburg Standard Time");
-        TZ.add("Bangladesh Standard Time");
-        TZ.add("Krasnoyarsk Time");
-        TZ.add("China Standard Time");    //GMT+8
-        TZ.add("Japan Standard Time");  //GMT+9
-        TZ.add("Papua New Guinea Time");
-        TZ.add("Pohnpei Standard Time");    //GMT+11
-        TZ.add("Tuvalu Time");  //GMT+12
-
-
-        for (int i = 0; i < TZ.size(); i++) {
-            adapter.add(TZ.get(i));
-        }
-
+        int hour;
+        int minute;
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
 
-        timeZoneSpinner.setAdapter(adapter);
-        timeZoneSpinner.setSelection(5);
-
-
         //Sets Time and date picker default values to current time
-        timePicker.setHour(cal.get(Calendar.HOUR));
-        timePicker.setMinute(cal.get(Calendar.MINUTE));
+        if(Build.VERSION.SDK_INT >= 23){
+            timePicker.setHour(cal.get(Calendar.HOUR));
+            timePicker.setMinute(cal.get(Calendar.MINUTE));
+            //get inputs from user
+            hour = timePicker.getHour();
+            minute = timePicker.getMinute();
+        }
+        else{
+            timePicker.setCurrentHour(cal.get(Calendar.HOUR));
+            timePicker.setCurrentMinute(cal.get(Calendar.MINUTE));
+            //get inputs from user
+            hour = timePicker.getCurrentHour();
+            minute = timePicker.getCurrentMinute();
+        }
+
         datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH), null);
 
 
-        //get inputs from user
-        int hour = timePicker.getHour();
-        int minute = timePicker.getMinute();
         int month = datePicker.getMonth();
         int dayOfYr = datePicker.getDayOfMonth();
         int year = datePicker.getYear();
@@ -161,15 +152,40 @@ public class SetAlarm extends Activity {
 
         //Convert time/date into a time in milliseconds
         Calendar alarmCal = Calendar.getInstance();
+        //alarmCal.setTimeInMillis(System.currentTimeMillis());
         alarmCal.set(year, month, dayOfYr, hour, minute);
-        double alarmTime = alarmCal.getTimeInMillis();
+        alarmTime = alarmCal.getTimeInMillis();
+
+        //TODO: add in
+        //alarmTime = timeZone(timeZoneSelection, alarmTime);
 
 
+        Calendar calendar = Calendar.getInstance();
+        //calendar.setTimeInMillis(System.currentTimeMillis());
 
-        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        intent = new Intent(this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
+        calendar.set(Calendar.MONTH, 11);
+        calendar.set(Calendar.YEAR, 2017);
+        calendar.set(Calendar.DAY_OF_MONTH, 10);
+        calendar.set(Calendar.HOUR_OF_DAY, 3);
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.AM_PM, Calendar.AM);
+
+
+        intent = new Intent(SetAlarm.this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+
+        Log.e("tag", calendar.getTimeInMillis()+"");
+
+        Log.e("tag", System.currentTimeMillis()+"");
+
+        Log.e("tag", alarmTime+"");
+
+
 
 
         //get repeat days
@@ -213,6 +229,34 @@ public class SetAlarm extends Activity {
 
         //get timezone selection (not exactly sure how this output will look, haven't tested)
         timeZoneSelection = timeZoneSpinner.getSelectedItemPosition();
+
+
+    }
+
+    public void sendNotificatioin(){
+
+        Log.i("sendNote called", "sdf");
+
+
+        notification = new  NotificationCompat.Builder(getApplicationContext());
+        notification.setAutoCancel(true);
+        notification.setSmallIcon(R.drawable.clock);
+        notification.setTicker("Test");
+        //notification.setWhen(System.currentTimeMillis());
+        notification.setContentTitle("Alarm Clock!");
+        notification.setContentText("Cannot add message");
+        notification.setDefaults(Notification.DEFAULT_ALL);
+        notification.setPriority(PRIORITY_HIGH);
+
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.notify(uniqueID, notification.build());
+    }
+
+
+    public double timeZone(int selection, double alarmTime){
+
+        Log.i("timeZone called", "sdf");
+
 
         double hrDif = 0;
 
@@ -289,13 +333,62 @@ public class SetAlarm extends Activity {
                 case 23:
                     hrDif = 18 * convert;
                     break;
+                default:
+                    break;
             }
 
             alarmTime = alarmTime + hrDif;
 
         }
 
+        return alarmTime;
+    }
 
+    public void fillZones(){
+
+        //This fills the timezone spinner with all the timezones
+        ArrayAdapter<CharSequence> adapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        ArrayList<String> TZ = new ArrayList<>();
+
+
+        TZ.add("Nieu Time");    //GMT-11
+        TZ.add("Hawaiian Standard Time"); //GMT-10
+        TZ.add("Alaskan Standard Time");
+        TZ.add("Pacific Standard Time");
+        TZ.add("Mountain Standard Time");
+        TZ.add("Central Standard Time"); //GMT-6
+        TZ.add("Eastern Standard Time");
+        TZ.add("Atlantic Standard Time"); //GMT-4
+        TZ.add("West Greenland Time");  //GMT-3
+        TZ.add("South Georgia Time");
+        TZ.add("East Greenland Time");
+        TZ.add("Greenwich Mean Time"); //GMT
+        TZ.add("Central European Time");    //GMT+01
+        TZ.add("Eastern European Time");
+        TZ.add("Moscow Standard Time");
+        TZ.add("Gulf Standard Time");   //GMT+4
+        TZ.add("Yekaterinburg Standard Time");
+        TZ.add("Bangladesh Standard Time");
+        TZ.add("Krasnoyarsk Time");
+        TZ.add("China Standard Time");    //GMT+8
+        TZ.add("Japan Standard Time");  //GMT+9
+        TZ.add("Papua New Guinea Time");
+        TZ.add("Pohnpei Standard Time");    //GMT+11
+        TZ.add("Tuvalu Time");  //GMT+12
+
+
+        for (int i = 0; i < TZ.size(); i++) {
+            adapter.add(TZ.get(i));
+        }
+
+        timeZoneSpinner.setAdapter(adapter);
+        timeZoneSpinner.setSelection(5);
+    }
+
+    public void locationBS(){
         // Get the location manager
         locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -337,13 +430,8 @@ public class SetAlarm extends Activity {
         }
         //Auto generated permission check end
 
-
         location = locationMgr.getLastKnownLocation(provider);
-
-
     }
-    public String getMessage(){
-        return alarmMessageText;
-    }
+
 
 }

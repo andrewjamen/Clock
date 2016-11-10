@@ -67,6 +67,10 @@ public class SetAlarm extends Activity {
                 setAlarm(v);
 
 
+                Intent main = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(main);
+
+
             }
 
 
@@ -130,13 +134,15 @@ public class SetAlarm extends Activity {
             adapter.add(TZ.get(i));
         }
 
-        timeZoneSpinner.setAdapter(adapter);
 
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+
+        timeZoneSpinner.setAdapter(adapter);
         timeZoneSpinner.setSelection(5);
 
 
         //Sets Time and date picker default values to current time
-        Calendar cal = Calendar.getInstance();
         timePicker.setHour(cal.get(Calendar.HOUR));
         timePicker.setMinute(cal.get(Calendar.MINUTE));
         datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
@@ -149,15 +155,21 @@ public class SetAlarm extends Activity {
         int month = datePicker.getMonth();
         int dayOfYr = datePicker.getDayOfMonth();
         int year = datePicker.getYear();
+        alarmMessageText = alarmMessage.getText().toString();
+
 
 
         //Convert time/date into a time in milliseconds
         Calendar alarmCal = Calendar.getInstance();
-        alarmCal.set(year, month, dayOfYr, hour, minute, 0);
+        alarmCal.set(year, month, dayOfYr, hour, minute);
         double alarmTime = alarmCal.getTimeInMillis();
 
-        //get alarm message
-        alarmMessageText = alarmMessage.getText().toString();
+
+
+        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        intent = new Intent(this, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
 
 
         //get repeat days
@@ -195,6 +207,7 @@ public class SetAlarm extends Activity {
             saturdayCB = true;
         else
             saturdayCB = false;
+
         //Save repeats days into boolean array, sunday - saturday
         boolean[] rptDays = {sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB};
 
@@ -284,8 +297,8 @@ public class SetAlarm extends Activity {
 
 
         // Get the location manager
-        locationMgr = (LocationManager)
-                getSystemService(Context.LOCATION_SERVICE);
+        locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         // Define the criteria how to select the location provider
         criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -322,22 +335,12 @@ public class SetAlarm extends Activity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-
         //Auto generated permission check end
+
+
         location = locationMgr.getLastKnownLocation(provider);
 
-        Log.i("Message:" +alarmMessageText, "");
-        Log.i("Time: " +String.valueOf(alarmTime), "");
-        Toast.makeText(getApplicationContext(), "Alarm Set Bitch", Toast.LENGTH_LONG).show();
 
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        intent = new Intent(SetAlarm.this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
-
-
-        Intent main = new Intent(SetAlarm.this, MainActivity.class);
-        startActivity(main);
     }
     public String getMessage(){
         return alarmMessageText;

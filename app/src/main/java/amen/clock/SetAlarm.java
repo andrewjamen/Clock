@@ -63,6 +63,7 @@ public class SetAlarm extends Activity {
     private static final int uniqueID = 112211;
 
 
+
     //On Create method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,8 +152,22 @@ public class SetAlarm extends Activity {
 
         //Convert time/date into a time in milliseconds
         Calendar alarmCal = Calendar.getInstance();
-        //alarmCal.setTimeInMillis(System.currentTimeMillis());
-        alarmCal.set(year, month, dayOfYr, hour, minute);
+        alarmCal.set(Calendar.MONTH, month);
+        alarmCal.set(Calendar.YEAR, year);
+        alarmCal.set(Calendar.DAY_OF_MONTH, dayOfYr);
+        alarmCal.set(Calendar.HOUR_OF_DAY, hour);
+        alarmCal.set(Calendar.MINUTE, minute);
+        alarmCal.set(Calendar.SECOND, 0);
+        if (hour > 12){
+            alarmCal.set(Calendar.AM_PM, Calendar.AM);
+        }
+        if (hour < 12 ){
+            alarmCal.set(Calendar.AM_PM, Calendar.PM);
+        }
+
+        //or....
+        //alarmCal.set(year, month, dayOfYr, hour, minute);
+
         alarmTime = alarmCal.getTimeInMillis();
 
         //TODO: add in
@@ -250,6 +265,7 @@ public class SetAlarm extends Activity {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(uniqueID, notification.build());
     }
+
 
     public double timeZone(int selection, double alarmTime){
 

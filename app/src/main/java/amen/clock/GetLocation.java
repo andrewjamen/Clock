@@ -28,6 +28,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.security.Permission;
 
 public class GetLocation extends AppCompatActivity {
+    public double latitudeD;
+    public double longitudeD;
     private TextView latitude;
     private TextView longitude;
     private TextView choice;
@@ -64,20 +66,20 @@ public class GetLocation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                if (fineAcc.isChecked()) {
+                //if (fineAcc.isChecked()) {
                     criteria.setAccuracy(Criteria.ACCURACY_FINE);
-                    choice.setText("fine accuracy selected");
-                } else {
-                    criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-                    choice.setText("coarse accuracy selected");
-                }
+                 //   choice.setText("fine accuracy selected");
+                //} else {
+                  //  criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+                   // choice.setText("coarse accuracy selected");
+                //}
             }
         });
 
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
+                != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
             } else {
@@ -86,7 +88,7 @@ public class GetLocation extends AppCompatActivity {
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         11);
             }
-        }else {
+        } else {
             Toast.makeText(this, "" + Manifest.permission.ACCESS_FINE_LOCATION + " is already granted.", Toast.LENGTH_SHORT).show();
         }
         criteria.setCostAllowed(false);
@@ -151,9 +153,11 @@ public class GetLocation extends AppCompatActivity {
         @Override
         public void onLocationChanged(Location location) {
             // Initialize the location fields
-            latitude.setText("Latitude: " + String.valueOf(location.getLatitude()));
-            longitude.setText("Longitude: " + String.valueOf(location.getLongitude()));
-            provText.setText(provider + " provider has been selected.");
+            //latitude.setText("Latitude: " + String.valueOf(location.getLatitude()));
+            //longitude.setText("Longitude: " + String.valueOf(location.getLongitude()));
+            latitudeD = location.getLatitude();
+            longitudeD = location.getLongitude()
+            //provText.setText(provider + " provider has been selected.");
 
             Toast.makeText(GetLocation.this, "Location changed!",
                     Toast.LENGTH_SHORT).show();
@@ -178,3 +182,4 @@ public class GetLocation extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+}

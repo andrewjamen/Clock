@@ -339,7 +339,7 @@ public class SetAlarm extends AppCompatActivity {
 
                 //Alarm alarm = new Alarm(alarmTime, alarmMessageText, rptDays, location); Not used, needed for array but still
 
-                notification.setSmallIcon(R.drawable.clock);
+            /*    notification.setSmallIcon(R.drawable.clock);
                 notification.setTicker(alarmMessageText);
                 notification.setWhen(System.currentTimeMillis());
                 notification.setContentTitle("Alarm Clock!");
@@ -353,16 +353,15 @@ public class SetAlarm extends AppCompatActivity {
                 notification.setContentIntent(pendingIntent2);
 
                 NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                nm.notify(uniqueID, notification.build());
+                nm.notify(uniqueID, notification.build());  */
 
                 alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 intent = new Intent(SetAlarm.this, AlarmReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, (long) alarmTime, pendingIntent);
 
-                Intent main = new Intent(SetAlarm.this, MainActivity.class);
-                startActivity(main);
-
+                //Intent main = new Intent(SetAlarm.this, MainActivity.class);
+                //startActivity(main);
             }
 
 

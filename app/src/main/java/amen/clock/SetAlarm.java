@@ -10,8 +10,6 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +17,6 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.location.Location;
 import android.os.Build;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -34,8 +31,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.location.Criteria;
 import android.widget.Toast;
-
-import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
 
 
 public class SetAlarm extends Activity {
@@ -57,12 +52,9 @@ public class SetAlarm extends Activity {
     private Intent intent;
     private PendingIntent pendingIntent;
     public Button setAlarmB;
-    private double alarmTime;
-
-    NotificationCompat.Builder notification;
-    private static final int uniqueID = 112211;
-
-
+    private long alarmTime;
+    public int hour;
+    public int minute;
 
     //On Create method
     @Override
@@ -72,37 +64,6 @@ public class SetAlarm extends Activity {
 
 
         setAlarmB = (Button) findViewById(R.id.setAlarmButton);
-
-        //On click listener to button
-        setAlarmB.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Log.i("onClick called", "sdf");
-
-                setAlarm(v);
-
-                Toast.makeText(getApplicationContext(), "Alarm Set", Toast.LENGTH_LONG).show();
-
-                sendNotificatioin();
-
-                Intent main = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(main);
-
-
-            }
-
-
-        });
-    }
-
-
-
-    public void setAlarm(View view)
-    {
-        Log.i("setAlarm called", "sdf");
-
 
         //Set spinners and stuff
         timePicker = (TimePicker) findViewById(R.id.timePicker);
@@ -117,8 +78,7 @@ public class SetAlarm extends Activity {
         friday = (CheckBox) findViewById(R.id.fridayCheckBox);
         saturday = (CheckBox) findViewById(R.id.saturdayCheckBox);
 
-        int hour;
-        int minute;
+        fillZones();
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
@@ -127,157 +87,144 @@ public class SetAlarm extends Activity {
         if(Build.VERSION.SDK_INT >= 23){
             timePicker.setHour(cal.get(Calendar.HOUR));
             timePicker.setMinute(cal.get(Calendar.MINUTE));
-            //get inputs from user
-            hour = timePicker.getHour();
-            minute = timePicker.getMinute();
         }
         else{
             timePicker.setCurrentHour(cal.get(Calendar.HOUR));
             timePicker.setCurrentMinute(cal.get(Calendar.MINUTE));
-            //get inputs from user
-            hour = timePicker.getCurrentHour();
-            minute = timePicker.getCurrentMinute();
         }
 
         datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH), null);
 
+        //On click listener to button
+        setAlarmB.setOnClickListener(new View.OnClickListener() {
 
-        int month = datePicker.getMonth();
-        int dayOfYr = datePicker.getDayOfMonth();
-        int year = datePicker.getYear();
-        alarmMessageText = alarmMessage.getText().toString();
+            @Override
+            public void onClick(View v) {
+
+                Log.e("onClick called", "");
+
+                //Sets Time and date picker default values to current time
+                if(Build.VERSION.SDK_INT >= 23){
+                    //get inputs from user
+                    hour = timePicker.getHour();
+                    minute = timePicker.getMinute();
+                }
+                else {
+                    //get inputs from user
+                    hour = timePicker.getCurrentHour();
+                    minute = timePicker.getCurrentMinute();
+                }
+
+                int month = datePicker.getMonth();
+                int dayOfYr = datePicker.getDayOfMonth();
+                int year = datePicker.getYear();
+                alarmMessageText = alarmMessage.getText().toString();
+
+                Log.e("Month: " +month, "");
+                Log.e("dayOfYr: " +dayOfYr, "");
+                Log.e("year: " +year, "");
+
+                //Convert time/date into a time in milliseconds
+                Calendar alarmCal = Calendar.getInstance();
+                alarmCal.set(Calendar.MONTH, month);
+                alarmCal.set(Calendar.YEAR, year);
+                alarmCal.set(Calendar.DAY_OF_MONTH, dayOfYr);
+                alarmCal.set(Calendar.HOUR_OF_DAY, hour);
+                alarmCal.set(Calendar.MINUTE, minute);
+                alarmCal.set(Calendar.SECOND, 0);
+                /*if (hour > 12){
+                    alarmCal.set(Calendar.AM_PM, Calendar.AM);
+                }
+                if (hour < 12 ){
+                    alarmCal.set(Calendar.AM_PM, Calendar.PM);
+                }*/
+
+                alarmTime = alarmCal.getTimeInMillis();
+
+                //get timezone selection (not exactly sure how this output will look, haven't tested)
+                timeZoneSelection = timeZoneSpinner.getSelectedItemPosition();
+
+                if(timeZoneSelection != 5)
+                    alarmTime = timeZone(timeZoneSelection, alarmTime);
+
+                Calendar calendar = Calendar.getInstance();
+
+                calendar.set(Calendar.MONTH, 11);
+                calendar.set(Calendar.YEAR, 2016);
+                calendar.set(Calendar.DAY_OF_MONTH, 10);
+                calendar.set(Calendar.HOUR_OF_DAY, 10);
+                calendar.set(Calendar.MINUTE, 30);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.AM_PM, Calendar.AM);
+
+                Log.e("alarmTime: ", alarmTime+"");
+
+                intent = new Intent(SetAlarm.this, AlarmReceiver.class);
+                intent.putExtra("message",alarmMessageText);
+
+                pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, (long)alarmTime, pendingIntent);
+
+                //get repeat days
+                if (sunday.isChecked())
+                    sundayCB = true;
+                else
+                    sundayCB = false;
+
+                if (monday.isChecked())
+                    mondayCB = true;
+                else
+                    mondayCB = false;
+
+                if (tuesday.isChecked())
+                    tuesdayCB = true;
+                else
+                    tuesdayCB = false;
+
+                if (wednesday.isChecked())
+                    wednesdayCB = true;
+                else
+                    wednesdayCB = false;
+
+                if (thursday.isChecked())
+                    thursdayCB = true;
+                else
+                    thursdayCB = false;
+
+                if (friday.isChecked())
+                    fridayCB = true;
+                else
+                    fridayCB = false;
+
+                if (saturday.isChecked())
+                    saturdayCB = true;
+                else
+                    saturdayCB = false;
+
+                //Save repeats days into boolean array, sunday - saturday
+                boolean[] rptDays = {sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB};
+
+                Toast.makeText(getApplicationContext(), "Alarm Set", Toast.LENGTH_LONG).show();
+
+                Intent main = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(main);
+            }
 
 
-
-        //Convert time/date into a time in milliseconds
-        Calendar alarmCal = Calendar.getInstance();
-        alarmCal.set(Calendar.MONTH, month);
-        alarmCal.set(Calendar.YEAR, year);
-        alarmCal.set(Calendar.DAY_OF_MONTH, dayOfYr);
-        alarmCal.set(Calendar.HOUR_OF_DAY, hour);
-        alarmCal.set(Calendar.MINUTE, minute);
-        alarmCal.set(Calendar.SECOND, 0);
-        if (hour > 12){
-            alarmCal.set(Calendar.AM_PM, Calendar.AM);
-        }
-        if (hour < 12 ){
-            alarmCal.set(Calendar.AM_PM, Calendar.PM);
-        }
-
-        //or....
-        //alarmCal.set(year, month, dayOfYr, hour, minute);
-
-        alarmTime = alarmCal.getTimeInMillis();
-
-        //TODO: add in
-        //alarmTime = timeZone(timeZoneSelection, alarmTime);
-
-
-        Calendar calendar = Calendar.getInstance();
-        //calendar.setTimeInMillis(System.currentTimeMillis());
-
-        calendar.set(Calendar.MONTH, 11);
-        calendar.set(Calendar.YEAR, 2017);
-        calendar.set(Calendar.DAY_OF_MONTH, 10);
-        calendar.set(Calendar.HOUR_OF_DAY, 3);
-        calendar.set(Calendar.MINUTE, 30);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.AM_PM, Calendar.AM);
-
-
-        intent = new Intent(SetAlarm.this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(SetAlarm.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-
-        Log.e("tag", calendar.getTimeInMillis()+"");
-
-        Log.e("tag", System.currentTimeMillis()+"");
-
-        Log.e("tag", alarmTime+"");
-
-
-
-
-        //get repeat days
-        if (sunday.isChecked())
-            sundayCB = true;
-        else
-            sundayCB = false;
-
-        if (monday.isChecked())
-            mondayCB = true;
-        else
-            mondayCB = false;
-
-        if (tuesday.isChecked())
-            tuesdayCB = true;
-        else
-            tuesdayCB = false;
-
-        if (wednesday.isChecked())
-            wednesdayCB = true;
-        else
-            wednesdayCB = false;
-
-        if (thursday.isChecked())
-            thursdayCB = true;
-        else
-            thursdayCB = false;
-
-        if (friday.isChecked())
-            fridayCB = true;
-        else
-            fridayCB = false;
-
-        if (saturday.isChecked())
-            saturdayCB = true;
-        else
-            saturdayCB = false;
-
-        //Save repeats days into boolean array, sunday - saturday
-        boolean[] rptDays = {sundayCB, mondayCB, tuesdayCB, wednesdayCB, thursdayCB, fridayCB, saturdayCB};
-
-        //get timezone selection (not exactly sure how this output will look, haven't tested)
-        timeZoneSelection = timeZoneSpinner.getSelectedItemPosition();
-
-
-    }
-
-    public void sendNotificatioin(){
-
-        Log.i("sendNote called", "sdf");
-
-
-        notification = new  NotificationCompat.Builder(getApplicationContext());
-        notification.setAutoCancel(true);
-        notification.setSmallIcon(R.drawable.clock);
-        notification.setTicker("Test");
-        //notification.setWhen(System.currentTimeMillis());
-        notification.setContentTitle("Alarm Clock!");
-        notification.setContentText("Cannot add message");
-        notification.setDefaults(Notification.DEFAULT_ALL);
-        notification.setPriority(PRIORITY_HIGH);
-
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify(uniqueID, notification.build());
+        });
     }
 
 
-    public double timeZone(int selection, double alarmTime){
+    public long timeZone(int selection, long timely){
 
-        Log.i("timeZone called", "sdf");
+        long hrDif = 0;
 
+        long convert = (long) (3.6 * Math.pow(10, 6));
 
-        double hrDif = 0;
-
-        double convert = 3.6 * Math.pow(10, 6);
-
-        if (timeZoneSelection != 5) {
-            switch (timeZoneSelection) {
+            switch (selection) {
                 case 0:
                     hrDif = -5 * convert;
                     break;
@@ -351,11 +298,8 @@ public class SetAlarm extends Activity {
                     break;
             }
 
-            alarmTime = alarmTime + hrDif;
-
-        }
-
-        return alarmTime;
+        timely = timely + hrDif;
+        return timely;
     }
 
     public void fillZones(){
@@ -366,7 +310,6 @@ public class SetAlarm extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         ArrayList<String> TZ = new ArrayList<>();
-
 
         TZ.add("Nieu Time");    //GMT-11
         TZ.add("Hawaiian Standard Time"); //GMT-10
@@ -392,7 +335,6 @@ public class SetAlarm extends Activity {
         TZ.add("Papua New Guinea Time");
         TZ.add("Pohnpei Standard Time");    //GMT+11
         TZ.add("Tuvalu Time");  //GMT+12
-
 
         for (int i = 0; i < TZ.size(); i++) {
             adapter.add(TZ.get(i));

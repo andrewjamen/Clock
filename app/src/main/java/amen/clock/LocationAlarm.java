@@ -72,12 +72,11 @@ public class LocationAlarm extends AppCompatActivity{
 
         alm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         in = new Intent(LocationAlarm.this, LocationReceiver.class);
-        alarmIntent = PendingIntent.getActivity(this, 000001, in, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmIntent = PendingIntent.getActivity(LocationAlarm.this, 000001, in, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, 5);//set to 5 to test
 
-        //alm = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
         alm.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), alarmIntent);
     }
 }

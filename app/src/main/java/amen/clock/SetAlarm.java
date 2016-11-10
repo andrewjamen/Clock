@@ -1,13 +1,10 @@
 package amen.clock;
-//https://developer.android.com/training/scheduling/alarms.html
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -28,8 +25,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.location.Criteria;
 import android.widget.Toast;
-
-import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
 
 
 public class SetAlarm extends Activity {
@@ -64,8 +59,7 @@ public class SetAlarm extends Activity {
 
         setAlarmB = (Button) findViewById(R.id.setAlarmButton);
 
-        //On click listener to button
-        setAlarmB.setOnClickListener(new View.OnClickListener() {
+      /*  setAlarmB.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -76,7 +70,7 @@ public class SetAlarm extends Activity {
             }
 
 
-        });
+        }); */
     }
 
     public void setAlarm(View view)
